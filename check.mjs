@@ -28,6 +28,10 @@ async function once() {
   const history = read('data/history.json', {});
   const incidents = read('data/incidents.json', []);
   const now = new Date();
+  // A service taken out of services.json leaves the public data too: its history
+  // goes now, and the status file is rebuilt from the list below on every run.
+  const ids = new Set(cfg.services.map((s) => s.id));
+  for (const id of Object.keys(history)) if (!ids.has(id)) delete history[id];
   const day = now.toISOString().slice(0, 10);
 
   async function check(s) {
