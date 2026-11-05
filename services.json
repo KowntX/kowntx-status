@@ -1,8 +1,8 @@
 {
-  "title": "Okount status",
+  "title": "Kownt X status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
-    { "id": "app", "name": "Okount app (web)", "group": "App", "url": "https://kirabee.gouravofficial007.workers.dev/" },
+    { "id": "app", "name": "Kownt X app (web)", "group": "App", "url": "https://kirabee.gouravofficial007.workers.dev/" },
     { "id": "shop", "name": "Online shop pages", "group": "App", "url": "https://kirabee.gouravofficial007.workers.dev/shop/status-check" },
     { "id": "website", "name": "Website", "group": "Website", "url": "", "planned": "Goes live when the website is hosted" },
     { "id": "database", "name": "Database", "group": "Backend", "url": "https://dvavouptszrwiscwmftx.supabase.co/rest/v1/" },

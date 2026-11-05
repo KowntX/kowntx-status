@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Okount status</title>
-<meta name="description" content="Whether the Okount app, sign-in, database and server tasks are working right now.">
+<title>Kownt X status</title>
+<meta name="description" content="Whether the Kownt X app, sign-in, database and server tasks are working right now.">
 <style>
   :root {
     --bg: #FBF7FC; --card: #FFFFFF; --text: #1F1B24; --text2: #62576A; --line: #E8E0EC;
@@ -43,7 +43,7 @@
 </head>
 <body>
 <main>
-  <h1>Okount status</h1>
+  <h1>Kownt X status</h1>
   <p class="sub" id="checked">Loading…</p>
   <div class="banner" id="banner">Checking…</div>
   <div id="groups"></div>
@@ -57,7 +57,7 @@ const HEAD = {
   operational: ['Everything is working', 'Billing, sign-in and the database are answering normally.'],
   degraded: ['Working, but slow', 'Some services are answering slowly.'],
   partial: ['Some services are not working', 'Billing keeps working on the phone and syncs when the service is back.'],
-  major: ['Okount is down', 'Bills made now are kept on the phone and sync when it is back.'],
+  major: ['Kownt X is down', 'Bills made now are kept on the phone and sync when it is back.'],
 };
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const when = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -66,7 +66,7 @@ const mins = (a, b) => Math.max(1, Math.round((new Date(b) - new Date(a)) / 6000
 async function load() {
   // Results are read straight from the repo, which the checker updates every 5 minutes;
   // the published copy next to this page only refreshes when the page itself is rebuilt.
-  const RAW = 'https://raw.githubusercontent.com/gourav0O7/okount-status/main/data/';
+  const RAW = 'https://raw.githubusercontent.com/KowntX/kowntx-status/main/data/';
   const get = (f) => fetch(`${RAW}${f}?t=${Date.now()}`).then((r) => r.json()).catch(() => fetch(`data/${f}`).then((r) => r.json()));
   const [status, history, incidents] = await Promise.all([get('status.json'), get('history.json'), get('incidents.json')]);
   document.getElementById('checked').textContent = `Last checked ${when(status.checkedAt)} · refreshes every 5 minutes`;
@@ -98,7 +98,7 @@ async function load() {
   if (incidents.length) {
     document.getElementById('incidents').innerHTML = incidents.slice(0, 20).map((i) => `
       <div class="incident"><strong>${esc(i.name)}</strong> ${i.resolvedAt ? `was down for ${mins(i.startedAt, i.resolvedAt)} min` : '<strong style="color:var(--down)">is down now</strong>'}
-      <div class="muted">${when(i.startedAt)}${i.cause ? ` · ${esc(i.cause)}` : ''}${i.issue ? ` · <a href="https://github.com/gourav0O7/okount-status/issues/${i.issue}">details</a>` : ''}</div></div>`).join('');
+      <div class="muted">${when(i.startedAt)}${i.cause ? ` · ${esc(i.cause)}` : ''}${i.issue ? ` · <a href="https://github.com/KowntX/kowntx-status/issues/${i.issue}">details</a>` : ''}</div></div>`).join('');
   }
 }
 load().catch(() => { document.getElementById('banner').textContent = 'Could not load the status. Try again in a minute.'; });
