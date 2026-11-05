@@ -19,3 +19,13 @@ and GitHub Pages.
 
 No keys or secrets are needed or stored: an answer below 500 (including
 "not signed in") counts as working.
+
+## The page
+
+`site/` is a plain static page in the Kownt X design (Kountour colours and type,
+the Gold coin wordmark on the plum bar, light and dark following the device).
+Its fonts and logo sit next to it in `site/fonts` and `site/brand`, with no
+libraries or CDNs, so it stays up when everything else is down. It works on
+any static host (GitHub Pages or Cloudflare): it reads the results from this
+repo on raw.githubusercontent.com and falls back to the `data/` copied beside it.
+
