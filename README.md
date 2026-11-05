@@ -1,6 +1,6 @@
-# Okount status
+# Kownt X status
 
-Live page: https://gourav0o7.github.io/okount-status/
+Live page: https://kowntx.github.io/kowntx-status/
 
 A GitHub Action (`.github/workflows/status.yml`) runs `check.mjs`, which asks
 each service in `services.json` whether it is answering every 5 minutes for
@@ -11,7 +11,7 @@ and GitHub Pages.
 
 - **Down for two checks in a row** → an issue labelled `outage` opens here, so
   the repo owner gets an email. It closes itself when the service is back.
-- **The app reads** `https://gourav0o7.github.io/okount-status/data/status.json`
+- **The app reads** `https://kowntx.github.io/kowntx-status/data/status.json`
   to show an outage banner.
 - **Add or change a service:** edit `services.json`. `"planned": "why"` shows it
   as "Not live yet" without checking it or raising alerts; remove that line

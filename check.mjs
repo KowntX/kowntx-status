@@ -38,7 +38,7 @@ async function once() {
         method: s.method || 'GET',
         redirect: 'follow',
         signal: AbortSignal.timeout(TIMEOUT_MS),
-        headers: { 'user-agent': 'okount-status (+https://github.com/gourav0O7/okount-status)', origin: 'https://okount-status.github.io' },
+        headers: { 'user-agent': 'kowntx-status (+https://github.com/KowntX/kowntx-status)', origin: 'https://okount-status.github.io' },
       });
       const ms = Date.now() - t0;
       // 404 on a server task means it is not deployed; 5xx means it is broken.
