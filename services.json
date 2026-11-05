@@ -7,7 +7,6 @@
     { "id": "website", "name": "Website", "group": "Website", "url": "", "planned": "Goes live when the website is hosted" },
     { "id": "database", "name": "Database", "group": "Backend", "url": "https://dvavouptszrwiscwmftx.supabase.co/rest/v1/" },
     { "id": "auth", "name": "Sign-in", "group": "Backend", "url": "https://dvavouptszrwiscwmftx.supabase.co/auth/v1/health" },
-    { "id": "ai", "name": "AI drafts", "group": "Server tasks", "url": "https://dvavouptszrwiscwmftx.supabase.co/functions/v1/ai-draft", "method": "OPTIONS" },
     { "id": "payments", "name": "Payment links", "group": "Server tasks", "url": "https://dvavouptszrwiscwmftx.supabase.co/functions/v1/payment-link", "method": "OPTIONS", "planned": "Not switched on yet" },
     { "id": "upi", "name": "Payment confirmations (Razorpay)", "group": "Server tasks", "url": "https://dvavouptszrwiscwmftx.supabase.co/functions/v1/razorpay-webhook", "method": "OPTIONS", "planned": "Not switched on yet" },
     { "id": "push", "name": "Phone notifications", "group": "Server tasks", "url": "https://dvavouptszrwiscwmftx.supabase.co/functions/v1/push-send", "method": "OPTIONS", "planned": "Not switched on yet" }

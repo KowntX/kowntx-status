@@ -1,0 +1,13 @@
+// Cloudflare Workers config for the status page on the company Cloudflare
+// account (worker kowntx-status). The page is plain files: site/ plus the
+// latest results in data/, copied side by side into _site/ the same way
+// .github/workflows/status.yml does for GitHub Pages. No code runs per visit.
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "kowntx-status",
+  "compatibility_date": "2026-10-01",
+  "build": { "command": "rm -rf _site && mkdir -p _site && cp -r site/* _site/ && cp -r data _site/data" },
+  "assets": { "directory": "./_site", "not_found_handling": "404-page" },
+  // Each branch gets a preview link (`npx wrangler preview`); needs this block.
+  "previews": {}
+}
