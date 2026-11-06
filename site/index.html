@@ -4,342 +4,409 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>KowntX status</title>
-<meta name="description" content="Whether the KowntX app, sign-in, database and server tasks are working right now.">
-<meta name="theme-color" content="#24081F">
+<meta name="description" content="Whether the KowntX app, sign-in, database and server tasks are working right now, and every past outage.">
+<meta name="theme-color" content="#3D0F35">
 <link rel="icon" href="brand/kowntx-icon.svg" type="image/svg+xml">
 <link rel="icon" href="brand/favicon.png" type="image/png" sizes="48x48">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/bricolage-title.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-hero.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist-mono.woff2" as="font" type="font/woff2" crossorigin>
 <!--
-  Built from Kountour, the KowntX design system: the colour roles are the app's
-  (src/ds/tokens.ts: light, and dark = plum + blush), the type is the app's scale
-  (titleL, titleS, row, bodyM, bodyS, status, data, one step smaller on a phone),
-  and the parts are Kountour's Status (dot + word), Pane, StatTile, EmptyState and
-  SkeletonScreen. The top band stays plum in every theme, like the app's nav, so
-  the wordmark is the night one (gold coin, lime x). The logo never moves.
-
-  The top is a live map of the system: shops reach the app, the app reaches
-  sign-in and the database, and those run the server tasks. Data flows along the
-  lines while a service answers, stops and turns coral when it doesn't, and a
-  scan line passes over the map whenever a new check lands. Everything is still
-  under reduced motion.
+  Built from the website's own parts (kowntx-website), so the status page reads as
+  the same place:
+  - the ground is KowntX Plum, the type is blush, Paid Lime is the live thing, and
+    coral is kept for what is down (src/lib/tokens.ts, dsNight);
+  - the glass nav, the night slab header with its crumbs, lime eyebrow and two-tone
+    headline beside an isometric picture (components/PageHeader + FeatureArt);
+  - the Trust center's list: a group name on the left, rows with a hairline above
+    and a dot + word on the right (app/trust/page.tsx);
+  - the blush reading band torn like a receipt where it meets plum (.tear-t/.tear-b),
+    the lime closing band, and the footer that ends like a receipt.
+  The picture is the shop itself: the till rings a sale, the receipt prints, and the
+  sale runs to the rack (one light per service) and the database and back. A light
+  goes coral when its service stops answering, and the sale stops at the till.
+  Everything is still under reduced motion. The logo never moves.
 
   Everything this page needs lives next to it (fonts, logo, no libraries), so it
   keeps working when the app, the website and every CDN are down.
 -->
 <style>
-  @font-face { font-family: "KX Title"; src: url(fonts/bricolage-title.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "KX Head"; src: url(fonts/bricolage-hero.woff2) format("woff2"); font-weight: 700 800; font-display: swap; }
   @font-face { font-family: "Geist"; src: url(fonts/geist.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
   @font-face { font-family: "Geist Mono"; src: url(fonts/geist-mono.woff2) format("woff2"); font-weight: 400 500; font-display: swap; }
 
   :root {
-    /* Page: the app's light roles. */
-    --bg: #F8F8F9; --surface: #FFFFFF; --sunken: #EDEDF0; --border: #E4E4E7;
-    --text: #18181B; --text2: #3F3F46; --text3: #5F5F68;
-    --accent: #3D0F35; --on-accent: #FBEAF3; --accent-hover: #5C1A51;
-    --good: #3F6212; --warn: #D4880F; --bad: #B8361B; --bad-text: #B8361B; --off: #A1A1AA;
-    --card-shadow: 0 1px 2px rgba(36, 8, 31, .06);
-    /* The top band: plum in every theme, like the app's nav. */
-    --nav: #24081F; --band: #2E0B28; --chip: #3D0F35; --chip-2: #4A1342;
-    --b-text: #FBEAF3; --b-text2: #D9B8CC; --b-text3: #A9809B; --b-line: rgba(251, 234, 243, .14); --b-line2: rgba(251, 234, 243, .26);
-    --b-good: #D6F53A; --b-warn: #FFC46B; --b-bad: #FF8A5C; --b-off: #7D5A73;
-    --title: "KX Title", "Bricolage Grotesque", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+    /* The website's night palette (dsNight). */
+    --bg: #3D0F35; --sunken: #24081F; --elev: #4A1342; --surface-2: #56184B; --surface-3: #682059;
+    --line: #5A1D4F; --line-strong: #7D2F6C;
+    --ink: #FBEAF3; --ink-2: #D9B8CC; --ink-3: #B48AA6;
+    --lime: #D6F53A; --lime-ink: #1B2100; --coral: #FF8A5C;
+    /* The reading band (dsBlush). */
+    --paper: #FBEAF3; --paper-line: #E3BDD3; --paper-ink: #3D0F35; --paper-ink-2: #5C1A51; --paper-ink-3: #7D2F6C; --paper-bad: #B8361B;
+    --head: "KX Head", "Bricolage Grotesque", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
     --body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     --ease: cubic-bezier(.16, 1, .3, 1);
-    color-scheme: light;
-  }
-  /* Dark: plum page, LIGHTER plum cards, blush type (never black). */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #3A1234; --surface: #5A2E53; --sunken: #2C0C27; --border: #7E5076;
-      --text: #FBEAF3; --text2: #F1D3E4; --text3: #E8C6DA;
-      --accent: #F7C6DF; --on-accent: #3D0F35; --accent-hover: #FBEAF3;
-      --good: #D6F53A; --warn: #FFD27A; --bad: #FF8A5C; --bad-text: #FFB08F; --off: #B88AAD;
-      --card-shadow: 0 0 0 1px rgba(251, 234, 243, .06) inset;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #3A1234; --surface: #5A2E53; --sunken: #2C0C27; --border: #7E5076;
-    --text: #FBEAF3; --text2: #F1D3E4; --text3: #E8C6DA;
-    --accent: #F7C6DF; --on-accent: #3D0F35; --accent-hover: #FBEAF3;
-    --good: #D6F53A; --warn: #FFD27A; --bad: #FF8A5C; --bad-text: #FFB08F; --off: #B88AAD;
-    --card-shadow: 0 0 0 1px rgba(251, 234, 243, .06) inset;
     color-scheme: dark;
   }
-
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 400 15px/22px var(--body); letter-spacing: -0.1px; -webkit-font-smoothing: antialiased; }
-  a { color: inherit; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-  .wrap { max-width: 880px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .mono { font-family: var(--mono); font-weight: 500; letter-spacing: -0.2px; font-variant-numeric: tabular-nums; }
+  html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  ::selection { background: var(--lime); color: var(--lime-ink); }
+  a { color: inherit; text-decoration: none; }
+  p, h1, h2, h3, ul, ol { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; border-radius: 6px; }
+  .mono { font-family: var(--mono); font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .wrap { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+  @media (min-width: 768px) { .wrap { padding-inline: 24px; } }
+  .ulink { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .45s var(--ease), color .3s; padding-bottom: 2px; }
+  .ulink:hover { background-size: 100% 1px; }
 
-  /* ------------------------------------------------------------ top band */
-  .nav { background: var(--nav); color: var(--b-text); padding-top: env(safe-area-inset-top); }
-  .nav .wrap { display: flex; align-items: center; gap: 14px; min-height: 60px; }
-  .nav .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-  .nav .brand img { height: 24px; width: auto; display: block; }
-  .nav .brand span { padding-left: 14px; border-left: 1px solid var(--b-line); font: 600 15px/20px var(--body); }
-  .nav .home { margin-left: auto; font: 600 14px/20px var(--body); color: var(--b-text2); text-decoration: none; padding: 10px 0; }
-  .nav .home:hover { color: var(--b-text); }
+  /* Headlines: Bricolage, heavy and condensed. The second clause is quieter (.serif on the site). */
+  .h-hero, .h-sec { font-family: var(--head); font-weight: 740; letter-spacing: -0.022em; line-height: .92; text-wrap: balance; }
+  .h-hero { font-size: clamp(2.5rem, 6.5vw, 5.25rem); }
+  .h-sec { font-size: clamp(2rem, 4vw, 3.25rem); line-height: .96; letter-spacing: -0.02em; }
+  .quiet { color: var(--ink-3); }
 
-  .band { color: var(--b-text); background-color: var(--band);
-    background-image: radial-gradient(rgba(251, 234, 243, .09) 1px, transparent 1.2px); background-size: 20px 20px; background-position: -10px -10px; }
-  .band .wrap { padding-top: 36px; padding-bottom: 40px; display: grid; gap: 28px; }
+  /* The one button: a fill grows from where the pointer came in (components/Cta). */
+  .cta { --x: 50%; --y: 50%; position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding-inline: 24px; border: 0; border-radius: 12px; overflow: hidden;
+    font: 600 16px/1 var(--body); letter-spacing: -0.2px; white-space: nowrap; cursor: pointer; background: var(--ink); color: var(--bg);
+    transition: transform .5s var(--ease), color .45s var(--ease); -webkit-tap-highlight-color: transparent; }
+  .cta-sm { height: 40px; padding-inline: 16px; font-size: 14px; border-radius: 10px; }
+  .cta-fill { position: absolute; z-index: -1; left: var(--x); top: var(--y); width: 260%; aspect-ratio: 1; border-radius: 999px; translate: -50% -50%; scale: 0; background: var(--lime); transition: scale .6s var(--ease); }
+  .cta svg { width: 16px; height: 16px; transition: transform .5s var(--ease); }
+  .cta-plum { background: var(--bg); color: var(--ink); }
+  .cta-plum .cta-fill { background: var(--sunken); }
+  @media (hover: hover) {
+    .cta:hover .cta-fill { scale: 1; }
+    .cta:hover { color: var(--lime-ink); }
+    .cta-plum:hover { color: var(--ink); }
+    .cta:hover svg { transform: translateX(3px); }
+  }
+  .cta:active { transform: scale(.97); }
+  .cta[disabled] { opacity: .6; pointer-events: none; }
 
-  /* Head: the overall state, live. */
-  .head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 32px; align-items: end; }
-  .state { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; }
-  .beacon { position: relative; width: 16px; height: 16px; margin-top: 9px; grid-row: span 3; }
-  .beacon i { position: absolute; inset: 0; border-radius: 50%; background: var(--c, var(--b-off)); }
-  .beacon i + i { background: none; box-shadow: 0 0 0 2px var(--c, var(--b-off)); animation: ping 2.4s var(--ease) infinite; }
-  .beacon i + i + i { animation-delay: 1.2s; }
-  @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
-  .is-operational { --c: var(--b-good); } .is-degraded { --c: var(--b-warn); } .is-partial, .is-major { --c: var(--b-bad); }
-  .state h1 { margin: 0; font: 700 34px/36px var(--title); letter-spacing: -0.8px; text-wrap: balance; }
-  .state p { margin: 8px 0 0; color: var(--b-text2); max-width: 46ch; }
-  .clock { margin-top: 16px; display: grid; gap: 8px; max-width: 360px; font: 400 13px/18px var(--body); color: var(--b-text3); }
+  /* ------------------------------------------------------------ nav: the site's glass bar */
+  .nav { position: fixed; inset: 0 0 auto; z-index: 50; padding: calc(12px + env(safe-area-inset-top, 0px)) 12px 0; pointer-events: none; }
+  .nav-in { pointer-events: auto; max-width: 1232px; margin: 0 auto; height: 56px; padding-inline: 16px 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-radius: 18px; position: relative; isolation: isolate;
+    background: linear-gradient(180deg, rgba(251, 234, 243, .08), rgba(251, 234, 243, .02)), rgba(36, 8, 31, .55);
+    -webkit-backdrop-filter: blur(30px) saturate(150%); backdrop-filter: blur(30px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -1px 0 rgba(255, 255, 255, .06), 0 24px 60px -24px rgba(0, 0, 0, .65), 0 2px 6px rgba(0, 0, 0, .18); }
+  .nav-in::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: linear-gradient(140deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .08) 40%, rgba(255, 255, 255, .04) 70%, rgba(255, 255, 255, .22));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .nav-l { display: flex; align-items: center; gap: 28px; }
+  .nav .logo img { display: block; height: 26px; width: auto; }
+  .nav-links { display: none; gap: 4px; font-size: 14.5px; }
+  .nav-links a { padding: 8px 12px; color: var(--ink-2); transition: color .2s; }
+  .nav-links a:hover, .nav-links a[aria-current] { color: var(--ink); }
+  .nav-r { display: flex; align-items: center; gap: 4px; }
+  @media (min-width: 768px) { .nav-in { padding-inline: 20px 8px; } .nav-links { display: flex; } }
+
+  /* ------------------------------------------------------------ the header slab (PageHeader) */
+  .top { padding: 8px 8px 0; }
+  .slab { position: relative; overflow: hidden; border-radius: 20px; background: var(--sunken); padding: 96px 24px 48px; text-align: center; }
+  .slab-in { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .copy { width: 100%; max-width: 56rem; }
+  .crumbs { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; font-size: 13px; color: var(--ink-3); }
+  .crumbs a:hover { color: var(--ink); }
+  .crumbs [aria-current] { color: var(--ink-2); }
+  .eyebrow { font-size: 17px; font-weight: 600; color: var(--lime); min-height: 25px; }
+  .slab h1 { margin-top: 24px; }
+  .lede { margin: 24px auto 0; max-width: 40rem; font-size: 18px; line-height: 1.62; color: var(--ink-2); }
+  .art { order: -1; width: min(78vw, 34svh, 360px); margin: 0 auto 24px; }
+  .art svg { display: block; width: 100%; height: auto; overflow: visible; }
+  /* the check: figures and the clock to the next one */
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 36px auto 0; max-width: 34rem; text-align: left; }
+  .fact { padding: 0 16px; border-left: 1px solid var(--line-strong); min-width: 0; }
+  .fact:first-child { border-left: 0; padding-left: 0; }
+  .fact b { display: block; font: 500 clamp(22px, 2.6vw, 30px)/1.1 var(--mono); letter-spacing: -0.04em; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .fact b small { font-size: .55em; letter-spacing: 0; color: var(--ink-2); margin-left: 2px; }
+  .fact span { display: block; margin-top: 6px; font-size: 13.5px; line-height: 1.35; color: var(--ink-3); }
+  .clock { margin: 28px auto 0; max-width: 34rem; display: grid; gap: 10px; font-size: 14px; color: var(--ink-3); }
   .clock-row { display: flex; justify-content: space-between; gap: 12px; }
-  .clock-row b { font-weight: 400; color: var(--b-text2); }
-  .meter { height: 3px; border-radius: 2px; background: var(--b-line); overflow: hidden; }
-  .meter i { display: block; height: 100%; width: 100%; background: var(--c, var(--b-good)); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform 1s linear; }
+  .clock-row b { font-weight: 500; color: var(--ink-2); }
+  .meter { height: 2px; background: var(--line); overflow: hidden; }
+  .meter i { display: block; height: 100%; width: 100%; background: var(--c, var(--lime)); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform 1s linear; }
   .meter.is-busy i { width: 30%; transform: none; animation: busy 1.2s var(--ease) infinite; }
   @keyframes busy { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
-  .late { color: var(--b-warn); }
+  .late { color: var(--coral) !important; }
   .dots::after { content: ""; animation: dots 1.2s steps(4) infinite; }
   @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .skel { display: block; margin-inline: auto; border-radius: 8px; background: var(--elev); animation: breathe 2s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .45; } }
+  .slab .cta { margin-top: 32px; }
 
-  /* StatTile, on plum. */
-  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; min-width: 0; }
-  .tile { padding: 14px 16px; border-radius: 12px; background: var(--chip); box-shadow: inset 0 0 0 1px var(--b-line); min-width: 132px; }
-  .tile span { display: block; font: 400 13px/18px var(--body); color: var(--b-text3); white-space: nowrap; }
-  .tile b { display: block; margin-top: 6px; font: 500 22px/26px var(--mono); letter-spacing: -0.6px; color: var(--b-text); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .tile b small { font-size: 14px; color: var(--b-text2); letter-spacing: 0; margin-left: 2px; }
+  @media (min-width: 768px) {
+    .top { padding: 16px 16px 0; }
+    .slab { border-radius: 32px; padding: 112px 24px 56px; }
+    .art { width: min(60vw, 40svh, 400px); margin-bottom: 32px; }
+  }
+  @media (min-width: 1024px) {
+    .slab { min-height: min(760px, calc(100svh - 16px)); display: flex; align-items: center; padding: 112px 0 64px; text-align: left; }
+    .slab-in { width: 100%; max-width: 1232px; margin: 0 auto; padding-inline: 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 40px; align-items: center; }
+    .copy { max-width: 44rem; }
+    .crumbs { justify-content: flex-start; }
+    .lede, .facts, .clock { margin-left: 0; max-width: 36rem; }
+    .skel { margin-left: 0; }
+    .art { order: 0; width: min(100%, 520px, 62svh); margin: 0 0 0 auto; }
+  }
 
-  /* The system map. */
-  .map { position: relative; border-radius: 16px; background: rgba(36, 8, 31, .55); box-shadow: inset 0 0 0 1px var(--b-line); padding: 24px; overflow: hidden; }
-  .map-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 18px; font: 400 13px/18px var(--body); color: var(--b-text3); }
-  .map-h h2 { margin: 0; font: 600 15px/20px var(--body); color: var(--b-text); letter-spacing: -0.1px; }
-  .tiers { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 40px; align-items: center; }
-  .tier { display: grid; gap: 10px; align-content: center; min-width: 0; }
-  .tier-t { font: 400 12px/16px var(--body); color: var(--b-text3); margin: 0 0 2px 2px; }
-  .chip { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--chip-2); box-shadow: inset 0 0 0 1px var(--b-line); min-width: 0; }
-  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--b-off)); grid-row: span 2; position: relative; }
-  .chip .dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 2px var(--c); opacity: 0; }
-  .chip.beat .dot::after { animation: ping 1.4s var(--ease) 1; }
-  .chip.is-down .dot::after { animation: ping 1.6s var(--ease) infinite; }
-  .chip b { font: 600 13px/18px var(--body); color: var(--b-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chip small { font: 500 12px/16px var(--mono); letter-spacing: -0.2px; color: var(--b-text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chip.is-up { --c: var(--b-good); } .chip.is-slow { --c: var(--b-warn); } .chip.is-down { --c: var(--b-bad); box-shadow: inset 0 0 0 1px var(--b-bad); }
-  .chip.is-down small { color: var(--b-bad); }
-  .chip.is-planned { background: transparent; box-shadow: none; outline: 1px dashed var(--b-line2); outline-offset: -1px; }
-  .chip.is-planned .dot { background: transparent; box-shadow: inset 0 0 0 1.5px var(--b-off); }
-  .chip.is-planned b { color: var(--b-text2); }
-  .chip.is-source { background: var(--chip); }
-  .chip.is-source .dot { --c: var(--b-text2); }
-  .wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-  .wires path { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-  .wires .rail { stroke: var(--b-line2); }
-  .wires .flow { stroke: var(--b-good); stroke-dasharray: 3 9; animation: flow .9s linear infinite; }
-  .wires .flow.is-slow { stroke: var(--b-warn); animation-duration: 2.6s; }
-  .wires .flow.is-in { stroke: var(--b-text2); opacity: .7; }
-  .wires .cut { stroke: var(--b-bad); stroke-dasharray: 2 6; }
-  .wires .idle { stroke: var(--b-line2); stroke-dasharray: 2 6; }
+  /* ------------------------------------------------------------ the picture (FeatureArt) */
+  .fa .fa-base { animation: fa-base .9s var(--ease) .05s both; }
+  .fa .fa-edge { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fa-edge 1.2s cubic-bezier(.65, 0, .35, 1) .15s forwards; }
+  .fa .fa-scan { animation: fa-scan 1.5s cubic-bezier(.45, 0, .25, 1) .45s both; }
+  .fa .fa-in { animation: fa-in .9s var(--ease) calc(.55s + var(--i) * 55ms) both; }
+  .fa .fa-x { --dz: calc(.35 + var(--i) / var(--n, 6)); transform: translate(calc(var(--px, 0) * var(--dz) * 14px), calc(var(--py, 0) * var(--dz) * 9px)); transition: transform .6s var(--ease); }
+  .fa .fa-base { translate: calc(var(--px, 0) * -5px) calc(var(--py, 0) * -3px); }
+  @media (hover: hover) { .fa:hover .fa-x { transform: translate(calc(var(--px, 0) * var(--dz) * 14px), calc(var(--py, 0) * var(--dz) * 9px - 4px - var(--i) * 1.5px)); transition-delay: calc(var(--i) * 20ms); } }
+  @keyframes fa-base { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes fa-scan { 0% { transform: none; opacity: 0; } 12% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translate(var(--sx), var(--sy)); opacity: 0; } }
+  @keyframes fa-edge { 0% { stroke-dashoffset: 1; opacity: 1; } 70% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: .25; } }
+  @keyframes fa-in { 0% { opacity: 0; transform: translateY(8px); filter: blur(3px); } 60% { filter: blur(0); } 100% { opacity: 1; transform: none; filter: none; } }
+  .fa[data-off] * { animation-play-state: paused !important; }
+  /* one light per service on the rack: lime breathing while it answers, coral blinking when it doesn't */
+  .fa .led { animation: led 2.8s ease-in-out infinite; animation-delay: calc(var(--k) * -.37s); }
+  .fa .led.is-down { animation: led-down .8s steps(2, jump-none) infinite; }
+  .fa .led.is-off { animation: none; }
+  @keyframes led { 50% { opacity: .45; } }
+  @keyframes led-down { 50% { opacity: .2; } }
+  /* the sale: rung up, printed, sent to the rack and the database, and back */
+  .fa .spark { offset-rotate: 0deg; animation: run 4.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+  .fa .trail { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trail 4.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+  .fa .ring { animation: ring 4.2s ease infinite; }
+  .fa .print { animation: print 4.2s cubic-bezier(.3, .7, .3, 1) infinite; }
+  .fa .flow { stroke-dasharray: 3 9; animation: flow 1.6s linear infinite; }
+  @keyframes run { 0%, 8% { offset-distance: 0%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 96%, 100% { offset-distance: 100%; opacity: 0; } }
+  @keyframes trail { 0%, 8% { stroke-dashoffset: 1; opacity: .9; } 90% { stroke-dashoffset: 0; opacity: .6; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+  @keyframes ring { 0%, 4% { opacity: .25; } 10%, 30% { opacity: 1; } 45%, 100% { opacity: .25; } }
+  @keyframes print { 0%, 10% { transform: translateY(40px); opacity: 1; } 55%, 85% { transform: none; opacity: 1; } 100% { transform: none; opacity: 0; } }
   @keyframes flow { to { stroke-dashoffset: -24; } }
-  .scan { position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: 120px; pointer-events: none; opacity: 0;
-    background: linear-gradient(90deg, transparent, rgba(214, 245, 58, .07) 80%, rgba(214, 245, 58, .5) 99%, transparent); }
-  .map.scanning .scan { animation: scan 1.6s var(--ease) 1; }
-  .map.is-checking .scan { animation: scan 1.8s linear infinite; }
-  @keyframes scan { 0% { transform: translateX(-120px); opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(var(--w, 900px)); opacity: 0; } }
-  .map-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 18px; font: 400 12px/16px var(--body); color: var(--b-text3); }
-  .map-foot span { display: inline-flex; align-items: center; gap: 8px; }
-  .map-foot svg { width: 22px; height: 6px; overflow: visible; }
-  .map-foot path { fill: none; stroke-width: 1.5; stroke-linecap: round; }
+  .fa .stuck { animation: led-down 1.2s steps(2, jump-none) infinite; }
 
-  /* Loading on plum. */
-  .bskel { display: block; border-radius: 6px; background: var(--chip-2); animation: breathe 2s ease-in-out infinite; }
-
-  /* ------------------------------------------------------------ page */
-  main.wrap { padding-top: 32px; padding-bottom: 48px; }
-  .pane { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--card-shadow); }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pane { border-color: transparent; } }
-  :root[data-theme="dark"] .pane { border-color: transparent; }
-
-  /* Status: Kountour's dot + word. */
-  .status { display: inline-flex; align-items: center; gap: 8px; font: 400 13px/18px var(--body); color: var(--text2); white-space: nowrap; }
-  .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--off)); flex: none; }
-  .status.is-up { --c: var(--good); } .status.is-slow { --c: var(--warn); }
-  .status.is-down { --c: var(--bad); color: var(--bad-text); font-weight: 600; }
-  .status.is-planned::before { background: transparent; box-shadow: inset 0 0 0 1.5px var(--off); }
+  /* ------------------------------------------------------------ the list (Trust center layout) */
+  .sec { padding: 80px 0; }
+  .sec-head { display: grid; gap: 20px; }
+  .sec-head p { max-width: 46ch; font-size: 16px; line-height: 1.62; color: var(--ink-2); }
+  .key { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--ink-3); }
+  .key li { display: inline-flex; align-items: center; gap: 8px; }
+  .key i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+  .groups { margin-top: 48px; display: grid; gap: 48px; }
+  .group { display: grid; gap: 16px; }
+  .group h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+  .group h3 small { display: block; margin-top: 4px; font: 400 14px/1.4 var(--body); letter-spacing: 0; color: var(--ink-3); }
+  .svc { border-top: 1px solid var(--line); padding: 18px 0 20px; }
+  .svc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .svc-name { font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .svc-why { margin-top: 4px; font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
+  .svc-end { display: inline-flex; align-items: center; gap: 14px; flex: none; padding-top: 1px; }
+  .svc-ms { font: 500 13px/20px var(--mono); letter-spacing: -0.02em; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  /* the site's StatusDot: a small dot and a word */
+  .status { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 14px; line-height: 20px; color: var(--ink-2); }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c, var(--ink-3)); flex: none; }
+  .is-up { --c: var(--lime); }
+  .is-slow { --c: var(--coral); }
+  .is-slow::before { background: none; box-shadow: inset 0 0 0 1.5px var(--coral); }
+  .is-down { --c: var(--coral); }
+  .status.is-down { color: var(--ink); font-weight: 600; }
+  .status.is-planned::before { background: none; box-shadow: inset 0 0 0 1.5px var(--ink-3); }
   .status.is-live::before { animation: live 2s var(--ease) infinite; }
   @keyframes live { 0%, 100% { box-shadow: 0 0 0 0 var(--c); } 60% { box-shadow: 0 0 0 6px transparent; } }
-
-  .key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; font: 400 13px/18px var(--body); color: var(--text3); }
-  .key li { display: inline-flex; align-items: center; gap: 8px; }
-  .key i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
-  .key i.is-none { box-shadow: inset 0 0 0 1px var(--border); }
-
-  .group { margin-top: 32px; }
-  .group h2, .outages h2 { margin: 0 0 12px; font: 700 19px/24px var(--title); letter-spacing: -0.25px; }
-  .svc { padding: 16px 20px; border-top: 1px solid var(--border); }
-  .svc:first-child { border-top: 0; }
-  .svc-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .svc-name { font: 600 17px/24px var(--body); letter-spacing: -0.25px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .svc-end { display: inline-flex; align-items: center; gap: 14px; flex: none; }
-  .svc-ms { font: 500 13px/18px var(--mono); letter-spacing: -0.2px; color: var(--text3); font-variant-numeric: tabular-nums; }
-  .svc-why { margin: 2px 0 0; font: 400 14px/20px var(--body); color: var(--text3); }
-  .bars { display: flex; gap: 2px; height: 28px; margin-top: 12px; touch-action: pan-y; cursor: default; }
-  .bars i { flex: 1 1 0; min-width: 0; border-radius: 2px; background: var(--c, var(--sunken)); }
+  .bars { display: flex; gap: 2px; height: 24px; margin-top: 16px; touch-action: pan-y; }
+  .bars i { flex: 1 1 0; min-width: 0; border-radius: 2px; background: var(--elev); transition: transform .2s var(--ease); }
+  .bars i.ok { background: color-mix(in srgb, var(--lime) 72%, var(--bg)); }
+  .bars i.dip { background: repeating-linear-gradient(135deg, var(--coral) 0 2px, transparent 2px 5px), var(--elev); }
+  .bars i.bad { background: var(--coral); }
   .bars i:last-child { animation: today 2.4s ease-in-out infinite; }
   @keyframes today { 50% { opacity: .55; } }
-  .bars i.is-on { outline: 2px solid var(--text); outline-offset: 1px; }
-  .enter .bars { animation: reveal 1.1s var(--ease) both; animation-delay: calc(var(--n, 0) * 70ms); }
+  .bars i.is-on { transform: scaleY(1.18); outline: 1px solid var(--ink); outline-offset: 1px; }
+  .key i.dip { background: repeating-linear-gradient(135deg, var(--coral) 0 2px, transparent 2px 4px), var(--elev); }
+  .enter .bars { animation: reveal 1.1s var(--ease) both; animation-delay: calc(var(--n, 0) * 80ms); }
   @keyframes reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  .enter .pane { animation: rise .7s var(--ease) both; animation-delay: calc(var(--n, 0) * 70ms); }
-  @keyframes rise { from { transform: translateY(10px); opacity: .3; } to { transform: none; opacity: 1; } }
-  .legend { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-top: 6px; font: 400 13px/18px var(--body); color: var(--text3); }
-  .legend > :nth-child(2) { color: var(--text2); text-align: center; }
+  .legend { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
+  .legend > :nth-child(2) { color: var(--ink-2); text-align: center; }
   .legend > :last-child { text-align: right; }
   .p30, .d30 { display: none; }
-
-  .outages { margin-top: 40px; }
-  .out { padding: 16px 20px; border-top: 1px solid var(--border); }
-  .out:first-child { border-top: 0; }
-  .out-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .out-name { font: 600 17px/24px var(--body); letter-spacing: -0.25px; min-width: 0; }
-  .out-len { font: 400 14px/20px var(--body); color: var(--text2); white-space: nowrap; }
-  .out-meta { margin-top: 2px; font: 400 14px/20px var(--body); color: var(--text3); }
-  .out-meta a { color: var(--text2); font-weight: 600; text-underline-offset: 3px; }
-  .more { display: block; width: 100%; padding: 14px 20px; border: 0; border-top: 1px solid var(--border); background: none; color: var(--text); font: 600 15px/20px var(--body); text-align: center; cursor: pointer; border-radius: 0 0 16px 16px; }
-  .more:hover { background: var(--sunken); }
-
-  .empty { padding: 32px 20px; text-align: center; }
-  .empty h3 { margin: 0; font: 700 19px/24px var(--title); letter-spacing: -0.25px; }
-  .empty p { margin: 8px auto 0; max-width: 34em; color: var(--text2); }
-  .band .empty { padding: 8px 0; }
-  .band .empty p { color: var(--b-text2); }
-  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; margin-top: 16px; padding: 0 22px; border: 0; border-radius: 12px; background: var(--b-text); color: #3D0F35; font: 600 15px/20px var(--body); cursor: pointer; }
-  .btn:hover { background: #FFFFFF; }
-  .btn[disabled] { opacity: .6; cursor: progress; }
-
-  .skel { display: grid; gap: 10px; }
-  .skel b { display: block; height: 12px; border-radius: 4px; background: var(--sunken); animation: breathe 2s ease-in-out infinite; }
-  .skel b.bar { height: 28px; }
-  @keyframes breathe { 50% { opacity: .45; } }
-
-  footer.wrap { padding-top: 24px; padding-bottom: calc(40px + env(safe-area-inset-bottom)); font: 400 14px/20px var(--body); color: var(--text3); }
-  footer p { margin: 0 0 6px; }
-
-  /* Computer to tablet: the map stacks its tiers when the columns get tight. */
-  @media (max-width: 860px) {
-    .head { grid-template-columns: minmax(0, 1fr); }
-    .tiles { max-width: 560px; }
+  .sk { display: block; height: 14px; border-radius: 4px; background: var(--elev); animation: breathe 2s ease-in-out infinite; }
+  .sk.bar { height: 24px; margin-top: 16px; }
+  @media (min-width: 768px) {
+    .sec { padding: 112px 0; }
+    .sec-head { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px 48px; }
+    .key { justify-content: flex-end; max-width: 30rem; }
+    .group { grid-template-columns: 200px minmax(0, 1fr); gap: 16px; }
+    .group h3 { padding-top: 16px; }
   }
-  /* Phone: one type step smaller, the map runs top to bottom, the last 30 days. */
+
+  /* ------------------------------------------------------------ outages: the blush reading band, torn like a receipt */
+  .tear-t, .tear-b { --t: 10px; }
+  .paper { position: relative; z-index: 1; background: var(--paper); color: var(--paper-ink); padding: calc(80px + var(--t, 10px)) 0 calc(80px + var(--t, 10px));
+    -webkit-mask: linear-gradient(#000 0 0) center / 100% calc(100% - 20px) no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1' preserveAspectRatio='none'%3E%3Cpath d='M0 .9 Q.1 .9 .2 .8 L.8 .2 Q1 0 1.2 .2 L1.8 .8 Q1.9 .9 2 .9 L2 1 L0 1 Z'/%3E%3C/svg%3E") 50% 0 / 20px 10px repeat-x,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1' preserveAspectRatio='none'%3E%3Cpath d='M 0 0.1 Q 0.1 0.1 0.2 0.2 L 0.8 0.8 Q 1 1 1.2 0.8 L 1.8 0.2 Q 1.9 0.1 2 0.1 L 2 0 L 0 0 Z'/%3E%3C/svg%3E") 50% 100% / 20px 10px repeat-x;
+    mask: linear-gradient(#000 0 0) center / 100% calc(100% - 20px) no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1' preserveAspectRatio='none'%3E%3Cpath d='M0 .9 Q.1 .9 .2 .8 L.8 .2 Q1 0 1.2 .2 L1.8 .8 Q1.9 .9 2 .9 L2 1 L0 1 Z'/%3E%3C/svg%3E") 50% 0 / 20px 10px repeat-x,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1' preserveAspectRatio='none'%3E%3Cpath d='M 0 0.1 Q 0.1 0.1 0.2 0.2 L 0.8 0.8 Q 1 1 1.2 0.8 L 1.8 0.2 Q 1.9 0.1 2 0.1 L 2 0 L 0 0 Z'/%3E%3C/svg%3E") 50% 100% / 20px 10px repeat-x; }
+  .paper .quiet { color: var(--paper-ink-3); }
+  .paper .sec-head p { color: var(--paper-ink-2); }
+  .outs { margin-top: 40px; }
+  .out { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 24px; border-top: 1px solid var(--paper-line); padding: 18px 0; }
+  .out:last-child { border-bottom: 1px solid var(--paper-line); }
+  .out-when { grid-column: 1 / -1; font: 500 13px/18px var(--mono); letter-spacing: -0.02em; color: var(--paper-ink-3); }
+  .out-name { font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .out-why { grid-column: 1; font-size: 14.5px; line-height: 1.55; color: var(--paper-ink-2); }
+  .out-why a { font-weight: 600; color: var(--paper-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .out-len { grid-column: 2; grid-row: 2; text-align: right; font-size: 14px; color: var(--paper-ink-2); white-space: nowrap; }
+  .out .status { color: var(--paper-bad); --c: var(--paper-bad); }
+  .more { margin-top: 24px; padding: 8px 0; border: 0; background: none; color: var(--paper-ink); font: 600 15px/20px var(--body); cursor: pointer; }
+  .none { margin-top: 40px; padding: 28px 0; border-top: 1px dashed var(--line-strong); border-bottom: 1px dashed var(--line-strong); text-align: center; }
+  .paper .none { border-color: var(--paper-line); }
+  .none h3 { font: 600 19px/1.3 var(--body); letter-spacing: -0.02em; }
+  .none p { margin-top: 8px; font-size: 15px; color: var(--paper-ink-2); }
+  @media (min-width: 768px) {
+    .paper { padding: calc(112px + 10px) 0; }
+    .out { grid-template-columns: 180px minmax(0, 1fr) auto; padding: 20px 0; }
+    .out-when { grid-column: 1; grid-row: 1 / span 2; padding-top: 2px; }
+    .out-name { grid-column: 2; }
+    .out-why { grid-column: 2; }
+    .out-len { grid-column: 3; grid-row: 1; }
+  }
+
+  /* ------------------------------------------------------------ the closing band, in lime */
+  .close { background: var(--lime); color: var(--lime-ink); padding: 96px 0; text-align: center; margin-top: -10px; }
+  .close .h-hero { font-size: clamp(2.4rem, 6vw, 4.75rem); }
+  .close p { margin: 20px auto 0; max-width: 34rem; font-size: 17px; line-height: 1.6; color: #2E3600; }
+  .close .cta { margin-top: 32px; }
+
+  /* ------------------------------------------------------------ footer: ends like a receipt */
+  footer { position: relative; overflow: hidden; padding-top: 64px; }
+  .foot-note { display: grid; gap: 6px; max-width: 46rem; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
+  .perf { margin-top: 48px; border-top: 1px dashed var(--line-strong); }
+  .fine { display: flex; flex-direction: column; gap: 20px; padding: 28px 0; font: 400 11.5px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--ink-3); }
+  .fine-l { display: flex; align-items: center; gap: 16px; }
+  .fine-l svg { height: 28px; width: auto; color: var(--ink-2); }
+  .fine-l small { display: block; font-size: inherit; text-transform: none; letter-spacing: .04em; }
+  .fine nav { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .fine nav a:hover { color: var(--ink); }
+  @media (min-width: 768px) { .fine { flex-direction: row; align-items: center; justify-content: space-between; } }
+  .foot-mark { display: block; margin: 24px 2vw 0; aspect-ratio: 3016 / 916; background: #4A1342; translate: 0 18%;
+    -webkit-mask: url(brand/kowntx-wordmark-mono.svg) center / contain no-repeat; mask: url(brand/kowntx-wordmark-mono.svg) center / contain no-repeat; }
+
   @media (max-width: 600px) {
-    body { font-size: 14px; line-height: 20px; }
-    .nav .wrap { min-height: 56px; }
-    .nav .brand img { height: 22px; }
-    .band .wrap { padding-top: 24px; padding-bottom: 28px; gap: 22px; }
-    .state { column-gap: 12px; }
-    .beacon { width: 12px; height: 12px; margin-top: 8px; }
-    .state h1 { font-size: 26px; line-height: 29px; }
-    .tiles { gap: 8px; }
-    .tile { padding: 12px; min-width: 0; }
-    .tile span { font-size: 12px; line-height: 16px; white-space: normal; }
-    .tile b { font-size: 18px; line-height: 22px; }
-    .tile b small { font-size: 12px; }
-    .map { padding: 16px; }
-    .tiers { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
-    .tier { gap: 8px; padding-left: 26px; }
-    .tier-t { margin-left: 0; }
-    .chip { grid-template-columns: auto minmax(0, 1fr) auto; }
-    .chip .dot { grid-row: auto; }
-    .chip small { text-align: right; }
-    main.wrap { padding-top: 24px; }
-    .clock, .key, .legend, .status, .map-h, .svc-ms { font-size: 12px; line-height: 16px; }
-    .group { margin-top: 28px; }
-    .group h2, .outages h2 { font-size: 16px; line-height: 21px; margin-bottom: 10px; }
-    .svc, .out { padding: 14px 16px; }
-    .svc-name, .out-name { font-size: 15px; line-height: 21px; }
-    .svc-end { gap: 10px; }
-    .svc-why, .out-meta, .out-len, footer.wrap { font-size: 13px; line-height: 18px; }
+    .lede { font-size: 16.5px; }
+    .fact { padding: 0 10px; }
+    .fact span { font-size: 12.5px; }
+    .clock { font-size: 13px; }
+    .svc-end { flex-direction: column; align-items: flex-end; gap: 2px; }
+    .svc-why, .out-why { font-size: 14px; }
     .bars i.old { display: none; }
     .bars { gap: 3px; }
     .p90, .d90 { display: none; } .p30, .d30 { display: inline; }
-    .empty h3 { font-size: 16px; line-height: 21px; }
+    .close { padding: 72px 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
-    .scan { display: none; }
+    .fa .spark, .fa .trail, .fa .fa-scan { opacity: 0; }
+    .fa .fa-edge { stroke-dashoffset: 0; opacity: .25; }
   }
 </style>
 </head>
 <body>
 <header class="nav">
-  <div class="wrap">
-    <a class="brand" href="./" aria-label="KowntX status">
-      <img src="brand/kowntx-wordmark-dark.svg" alt="KowntX" width="79" height="24">
-      <span>Status</span>
-    </a>
-    <a class="home" href="https://www.kowntx.com">kowntx.com</a>
+  <div class="nav-in">
+    <div class="nav-l">
+      <a class="logo" href="https://www.kowntx.com" aria-label="KowntX home"><img src="brand/kowntx-wordmark-dark.svg" alt="KowntX" width="86" height="26"></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="./" aria-current="page">Status</a>
+        <a href="https://www.kowntx.com/help">Help</a>
+        <a href="https://www.kowntx.com/trust">Trust center</a>
+      </nav>
+    </div>
+    <div class="nav-r">
+      <a class="cta cta-sm" href="https://www.kowntx.com"><span class="cta-fill"></span>Go to kowntx.com</a>
+    </div>
   </div>
 </header>
 
-<section class="band" aria-live="polite">
-  <div class="wrap">
-    <div class="head" id="head">
-      <div class="state">
-        <span class="beacon" aria-hidden="true"></span>
-        <div style="display: grid; gap: 10px"><span class="bskel" style="height: 34px; width: 70%"></span><span class="bskel" style="height: 14px; width: 90%"></span><span class="bskel" style="height: 14px; width: 50%"></span></div>
+<section class="top" aria-live="polite">
+  <div class="slab">
+    <div class="slab-in">
+      <div class="copy" id="head">
+        <nav class="crumbs" aria-label="Breadcrumb"><a class="ulink" href="https://www.kowntx.com">Home</a><span aria-hidden="true">/</span><span aria-current="page">Status</span></nav>
+        <p class="eyebrow" id="eyebrow">System status</p>
+        <div id="state">
+          <span class="skel" style="height: 64px; width: 80%; margin-top: 24px"></span>
+          <span class="skel" style="height: 64px; width: 55%; margin-top: 10px"></span>
+          <span class="skel" style="height: 18px; width: 70%; margin-top: 28px"></span>
+        </div>
       </div>
-    </div>
-    <div class="map" id="map">
-      <div class="map-h"><h2>How KowntX is connected</h2><span id="map-note"></span></div>
-      <div class="tiers" id="tiers">
-        <div class="tier"><span class="bskel" style="height: 56px"></span></div>
-        <div class="tier"><span class="bskel" style="height: 56px"></span><span class="bskel" style="height: 56px"></span></div>
-        <div class="tier"><span class="bskel" style="height: 56px"></span><span class="bskel" style="height: 56px"></span></div>
-        <div class="tier"><span class="bskel" style="height: 56px"></span></div>
-      </div>
-      <svg class="wires" id="wires" aria-hidden="true"></svg>
-      <div class="scan" aria-hidden="true"></div>
-      <div class="map-foot" aria-hidden="true">
-        <span><svg viewBox="0 0 22 6"><path d="M1 3H21" style="stroke: var(--b-good); stroke-dasharray: 3 9; animation: flow .9s linear infinite"/></svg>Answering</span>
-        <span><svg viewBox="0 0 22 6"><path d="M1 3H21" style="stroke: var(--b-warn); stroke-dasharray: 3 9; animation: flow 2.6s linear infinite"/></svg>Slow</span>
-        <span><svg viewBox="0 0 22 6"><path d="M1 3H21" style="stroke: var(--b-bad); stroke-dasharray: 2 6"/></svg>Not answering</span>
-        <span><svg viewBox="0 0 22 6"><path d="M1 3H21" style="stroke: var(--b-line2); stroke-dasharray: 2 6"/></svg>Not live yet</span>
-      </div>
+      <div class="art" id="art" aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
-<main class="wrap" id="main" aria-busy="true">
-  <ul class="key" id="key" hidden>
-    <li><i style="--c: var(--good)"></i>Working all day</li>
-    <li><i style="--c: var(--warn)"></i>Short breaks</li>
-    <li><i style="--c: var(--bad)"></i>Down for a while</li>
-    <li><i class="is-none" style="--c: var(--sunken)"></i>Not checked yet</li>
-  </ul>
-  <div id="groups">
-    <section class="group" aria-hidden="true"><div class="pane svc"><div class="skel"><b style="width: 45%"></b><b class="bar"></b></div></div></section>
-    <section class="group" aria-hidden="true"><div class="pane svc"><div class="skel"><b style="width: 35%"></b><b class="bar"></b></div></div></section>
-  </div>
-  <section class="outages" id="outages" hidden>
-    <h2>Past outages</h2>
-    <div class="pane" id="incidents"></div>
+<main id="main" aria-busy="true">
+  <section class="sec" id="parts" aria-labelledby="parts-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 class="h-sec" id="parts-title">Every part, <span class="quiet">checked every 5 minutes.</span></h2>
+          <p style="margin-top: 16px">One line is one day. Point at a day, or tap it, to read it.</p>
+        </div>
+        <ul class="key" id="key" aria-label="What the colours mean">
+          <li><i style="--c: color-mix(in srgb, var(--lime) 72%, var(--bg))"></i>Working all day</li>
+          <li><i class="dip"></i>Short breaks</li>
+          <li><i style="--c: var(--coral)"></i>Down for a while</li>
+          <li><i style="--c: var(--elev)"></i>Not checked yet</li>
+        </ul>
+      </div>
+      <div class="groups" id="groups">
+        <div class="group" aria-hidden="true"><span class="sk" style="width: 90px; margin-top: 18px"></span><div><div class="svc"><span class="sk" style="width: 40%"></span><span class="sk bar"></span></div><div class="svc"><span class="sk" style="width: 30%"></span><span class="sk bar"></span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="paper" id="outages" aria-labelledby="out-title" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 class="h-sec" id="out-title">Past outages.</h2>
+          <p style="margin-top: 16px">Every time a part stopped answering, when, and for how long.</p>
+        </div>
+      </div>
+      <div id="incidents"></div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-title">
+    <div class="wrap">
+      <h2 class="h-hero" id="close-title">Still stuck at the counter?</h2>
+      <p>Write to us with what you see. Bills you make meanwhile stay on the phone and sync when it is back.</p>
+      <a class="cta cta-plum" href="mailto:support@kowntx.com"><span class="cta-fill"></span>Email support<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
   </section>
 </main>
 
-<footer class="wrap">
-  <p>Checked from GitHub every 5 minutes, separately from the app, so this page stays up when KowntX is down.</p>
-  <p>Bills made while something is down are kept on the phone and sync when it is back.</p>
+<footer>
+  <div class="wrap">
+    <div class="foot-note">
+      <p>Checked from GitHub every 5 minutes, separately from the app, so this page stays up when KowntX is down.</p>
+      <p>Any answer short of a server error counts as working: a sign-in service that says "not signed in" is answering.</p>
+    </div>
+    <div class="perf"></div>
+    <div class="fine">
+      <p class="fine-l"><svg id="barcode" aria-hidden="true"></svg><span>Thank you. Visit again.<small>© <span id="year">2026</span> KowntX · Easeworks Technologies</small></span></p>
+      <nav aria-label="Legal">
+        <a href="https://www.kowntx.com/privacy">Privacy</a>
+        <a href="https://www.kowntx.com/terms">Terms</a>
+        <a href="https://www.kowntx.com/trust">Trust center</a>
+        <a href="https://www.kowntx.com/help">Help</a>
+      </nav>
+    </div>
+  </div>
+  <span class="foot-mark" aria-hidden="true"></span>
 </footer>
 
 <script>
@@ -355,16 +422,25 @@ const STALE_MIN = 20;   // 20 minutes without a check means the checker is behin
 const SHOW_OUTAGES = 10;
 
 const WORD = { up: 'Working', slow: 'Slow', down: 'Not working', planned: 'Not live yet' };
+// The headline: the state, then a quieter second clause that says what to do.
 const HEAD = {
-  operational: ['Everything is working', 'Billing, sign-in and the database are answering normally.'],
-  degraded: ['Working, but slow', 'Some services are taking longer than usual to answer. Billing still works.'],
-  partial: ['Some services are not working', 'Billing keeps working on the phone and syncs when the service is back.'],
-  major: ['KowntX is down', 'Bills made now are kept on the phone and sync when it is back.'],
+  operational: ['All working.', 'Sell as usual.', 'Billing, sign-in and the database are answering normally.'],
+  degraded: ['Running slow.', 'Bills still go through.', 'Some parts are taking longer than usual to answer.'],
+  partial: ['Part of it is down.', 'Billing still works.', 'Bills keep working on the phone and sync when the part is back.'],
+  major: ['KowntX is down.', 'Keep billing.', 'Bills you make now stay on the phone and sync when it is back.'],
 };
-// The map: which layer each group sits in, and short names for its chips.
-const TIERS = [['Shops'], ['App', 'Website'], ['Backend'], ['Server tasks']];
-const TIER_NAME = ['Who uses it', 'What they open', 'What it runs on', 'Jobs in the background'];
-const SHORT = { app: 'App', shop: 'Shop pages', website: 'Website', database: 'Database', auth: 'Sign-in', payments: 'Payment links', upi: 'Confirmations', push: 'Notifications' };
+// What each part does for a shop, in plain words.
+const WHAT = {
+  app: 'Billing, stock and customers, in the browser on any device.',
+  shop: 'The pages your customers order from.',
+  website: 'kowntx.com, where people read about KowntX and sign up.',
+  database: 'Where every bill, product and customer is saved.',
+  auth: 'Signing in to the app.',
+  payments: 'Links a customer pays a bill with.',
+  upi: 'Tells KowntX a payment has arrived.',
+  push: 'Alerts on your phone for orders and approvals.',
+};
+const GROUP = { App: 'The app', Website: 'The website', Backend: 'Behind the app', 'Server tasks': 'Background jobs' };
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 const $ = (id) => document.getElementById(id);
@@ -402,12 +478,184 @@ let showAll = false;
 let last = null;
 let firstPaint = true;
 
+/* ---------------------------------------------------------------- the eyebrow resolves from noise (the site's Scramble) */
+function scramble(el, text, ms = 700) {
+  if (reduce.matches) { el.textContent = text; return; }
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const t0 = performance.now();
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / ms), n = Math.floor(text.length * k);
+    el.textContent = text.slice(0, n) + [...text.slice(n)].map((c) => (c === ' ' ? ' ' : chars[(Math.random() * chars.length) | 0])).join('');
+    if (k < 1) requestAnimationFrame(step); else el.textContent = text;
+  };
+  requestAnimationFrame(step);
+}
+
+/* ---------------------------------------------------------------- the picture
+   The website's isometric kit (FeatureArt): map units projected onto the page,
+   boxes drawn as a top and the two faces that look at the viewer. */
+const SVGNS = 'http://www.w3.org/2000/svg';
+const S = 34, C = Math.cos(Math.PI / 6);
+const iso = (x, y, z = 0) => [240 + (x - y) * S * C, 206 + (x + y) * S * 0.5 - z * S];
+const pts = (...p) => p.map(([a, b]) => `${a.toFixed(1)},${b.toFixed(1)}`).join(' ');
+const flat = (z, ...xy) => pts(...xy.map(([a, b]) => iso(a, b, z)));
+const TONE = {
+  plum: ['#682059', '#4a1342', '#56184b'], deep: ['#3a0f33', '#24081f', '#2e0b28'], blush: ['#fbeaf3', '#d9b8cc', '#e9cbdc'],
+  lime: ['#d6f53a', '#a7bf2a', '#bcd730'], ground: ['#2e0b28', '#1a0616', '#21081d'], dark: ['#24081f', '#170513', '#1c0619'],
+};
+function box(x, y, z, w, d, h, tone = 'plum', rim = true) {
+  const [top, front, side] = TONE[tone];
+  const p = iso;
+  return (z === 0 && tone !== 'ground' ? `<polygon points="${pts(p(x - 0.02, y + 0.06), p(x + w + 0.16, y + 0.06), p(x + w + 0.16, y + d + 0.28), p(x - 0.02, y + d + 0.28))}" fill="#12030f" opacity=".42" filter="url(#fa-soft)"/>` : '')
+    + `<polygon points="${pts(p(x, y + d, z), p(x + w, y + d, z), p(x + w, y + d, z + h), p(x, y + d, z + h))}" fill="${front}"/>`
+    + `<polygon points="${pts(p(x + w, y, z), p(x + w, y + d, z), p(x + w, y + d, z + h), p(x + w, y, z + h))}" fill="${side}"/>`
+    + `<polygon points="${pts(p(x, y, z + h), p(x + w, y, z + h), p(x + w, y + d, z + h), p(x, y + d, z + h))}" fill="${top}"/>`
+    + (rim ? `<polyline points="${pts(p(x, y + d, z + h), p(x + w, y + d, z + h), p(x + w, y, z + h))}" fill="none" stroke="rgba(255,255,255,.35)"/>`
+      + `<line x1="${p(x + w, y + d, z)[0]}" y1="${p(x + w, y + d, z)[1]}" x2="${p(x + w, y + d, z + h)[0]}" y2="${p(x + w, y + d, z + h)[1]}" stroke="rgba(255,255,255,.12)"/>` : '');
+}
+const seg = (z, a, b, attrs) => { const [p, q] = [iso(a[0], a[1], z), iso(b[0], b[1], z)]; return `<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" ${attrs}/>`; };
+// A disc of the database stack: an upright cylinder at (x, y), r map units across, h tall.
+function disc(x, y, z, r, h, body, cap) {
+  const [cx, cy] = iso(x, y, z), rx = r * S * C * 1.4, ry = rx * 0.5, top = cy - h * S;
+  return `<path d="M${cx - rx} ${cy} A${rx} ${ry} 0 0 0 ${cx + rx} ${cy} L${cx + rx} ${top} L${cx - rx} ${top} Z" fill="${body}"/>`
+    + `<rect x="${cx - rx * 0.15}" y="${top}" width="${rx * 0.5}" height="${h * S}" fill="rgba(255,255,255,.12)"/>`
+    + `<ellipse cx="${cx}" cy="${top}" rx="${rx}" ry="${ry}" fill="${cap}"/>`;
+}
+// KowntX's stand-in for a person: a white robot, its visor toward +x.
+function robot(x, y) {
+  const visor = pts(iso(x + 0.7, y + 0.06, 1.02), iso(x + 0.7, y + 0.46, 1.02), iso(x + 0.7, y + 0.46, 1.2), iso(x + 0.7, y + 0.06, 1.2));
+  const [ax, ay] = iso(x + 0.35, y + 0.25, 1.34);
+  return box(x + 0.1, y + 0.05, 0, 0.5, 0.42, 0.78, 'blush') + box(x, y - 0.02, 0.84, 0.7, 0.54, 0.5, 'blush', true)
+    + `<polygon points="${visor}" fill="#3d0f35"/><line x1="${ax}" y1="${ay}" x2="${ax}" y2="${ay - 10}" stroke="#d9b8cc" stroke-width="2"/><circle cx="${ax}" cy="${ay - 11}" r="2.6" fill="#d9b8cc"/>`;
+}
+// The rack's lights sit on its front face, one row per service.
+const RACK = { x: 0.7, y: 0.6, w: 1.4, d: 1.1, h: 3.2 };
+const ledAt = (k) => [RACK.x + 1.0, RACK.y + RACK.d, 2.86 - k * 0.34];
+
+function drawArt(status) {
+  const svcs = (status && status.services) || [];
+  const overall = status ? status.overall : 'loading';
+  const ok = overall === 'operational' || overall === 'degraded';
+  const db = svcs.find((s) => s.id === 'database');
+  const dbDown = db && db.shown === 'down';
+  const tint = (s) => (!s ? '#7d2f6c' : s.shown === 'up' ? '#d6f53a' : s.shown === 'slow' ? '#ff8a5c' : s.shown === 'down' ? '#ff8a5c' : '#7d2f6c');
+  const pieces = [];
+
+  // the rack: one light per service, the cable down to the floor
+  const R = RACK;
+  let rack = box(R.x, R.y, 0, R.w, R.d, R.h, 'plum');
+  for (let k = 0; k < 8; k++) {
+    const [lx, ly, lz] = ledAt(k);
+    rack += seg(lz, [R.x + 0.14, ly], [R.x + 0.76, ly], 'stroke="#2e0b28" stroke-width="5" stroke-linecap="round"');
+    const s = svcs[k];
+    const [cx, cy] = iso(lx, ly, lz);
+    const cls = !status ? 'led is-off' : !s || s.shown === 'planned' ? 'led is-off' : s.shown === 'down' ? 'led is-down' : 'led';
+    rack += `<circle class="${cls}" style="--k:${k}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.4" fill="${status ? tint(s) : '#7d2f6c'}"/>`;
+  }
+  pieces.push(rack);
+
+  // the database: three discs, its own light on the top one
+  const D = [3.7, 1.6];
+  let dbArt = disc(D[0], D[1], 0, 0.62, 0.5, '#4a1342', '#682059') + disc(D[0], D[1], 0.6, 0.62, 0.5, '#4a1342', '#682059') + disc(D[0], D[1], 1.2, 0.62, 0.5, '#4a1342', '#682059');
+  const [dx, dy] = iso(D[0] + 0.2, D[1] + 0.45, 1.45);
+  dbArt += `<circle class="${!status ? 'led is-off' : dbDown ? 'led is-down' : 'led'}" style="--k:3" cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="3.4" fill="${status ? tint(db) : '#7d2f6c'}"/>`;
+  pieces.push(dbArt);
+
+  // the wires along the floor, from the till to the rack and the database: flowing while they answer
+  const wire = (a, b, live) => seg(0.01, a, b, `stroke="${!status ? 'rgba(241,211,228,.16)' : live ? '#d6f53a' : '#ff8a5c'}" stroke-width="2" stroke-linecap="round" class="${status && live ? 'flow' : ''}"${status && !live ? ' stroke-dasharray="2 6"' : ''}`);
+  const toRack = svcs.length ? !svcs.filter((s) => ['app', 'shop', 'auth'].includes(s.id)).some((s) => s.shown === 'down') : false;
+  // (run round the sides of the counter, where the floor is in view)
+  pieces.push(wire([2.38, 4.25], [1.95, 4.25], toRack) + wire([1.95, 4.25], [1.95, 1.72], toRack)
+    + wire([5.32, 4.05], [5.6, 4.05], !dbDown && !!svcs.length) + wire([5.6, 4.05], [5.6, 1.6], !dbDown && !!svcs.length) + wire([5.6, 1.6], [4.35, 1.6], !dbDown && !!svcs.length));
+
+  // the counter, its worktop, the till and the printer
+  let counter = box(2.4, 3.5, 0, 2.9, 1.3, 1.0, 'plum');
+  for (const x of [0.4, 0.9, 1.4, 1.9, 2.4]) { const [a, b] = [iso(2.4 + x, 4.8, 0.12), iso(2.4 + x, 4.8, 0.9)]; counter += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#3a0f33" stroke-width="1.2"/>`; }
+  counter += box(2.34, 3.44, 1.0, 3.02, 1.42, 0.08, 'blush', true);
+  pieces.push(counter);
+
+  // the till: a screen leaning back, its total lights lime as a sale is rung up
+  const tx = 3.7, ty = 4.45, tz = 1.08, tw = 1.0;
+  const a = iso(tx, ty, tz + 0.14), b = iso(tx + tw, ty, tz + 0.14), c2 = iso(tx + tw, ty - 0.4, tz + 0.77), d2 = iso(tx, ty - 0.4, tz + 0.77);
+  const at = (u, v) => [a[0] + (b[0] - a[0]) * u + (d2[0] - a[0]) * v, a[1] + (b[1] - a[1]) * u + (d2[1] - a[1]) * v];
+  const quad = (u0, u1, v0, v1) => pts(at(u0, v0), at(u1, v0), at(u1, v1), at(u0, v1));
+  let till = box(tx + tw / 2 - 0.25, ty - 0.3, tz, 0.5, 0.35, 0.05, 'dark', false) + box(tx + tw / 2 - 0.05, ty - 0.25, tz + 0.05, 0.1, 0.1, 0.3, 'dark', false);
+  till += `<polygon points="${pts(a, b, c2, d2)}" fill="#24081f"/><polygon points="${quad(0.05, 0.95, 0.07, 0.93)}" fill="#fbeaf3"/>`;
+  [0.78, 0.66, 0.54, 0.42].forEach((v, i) => { till += `<polygon points="${quad(0.1, i === 3 ? 0.45 : 0.6, v - 0.035, v)}" fill="#c9a3ba"/><polygon points="${quad(0.74, 0.9, v - 0.035, v)}" fill="#c9a3ba"/>`; });
+  till += `<polygon points="${quad(0.1, 0.9, 0.12, 0.28)}" fill="#3d0f35"/>`;
+  till += `<polygon points="${quad(0.62, 0.86, 0.17, 0.23)}" fill="${!status || ok ? '#d6f53a' : '#ff8a5c'}" class="${!status ? '' : ok ? 'ring' : 'stuck'}"/>`;
+  pieces.push(till);
+
+  // the printer, and the receipt it prints for each sale
+  const [px, py, pz] = [2.6, 3.7, 1.08];
+  let printer = box(px, py, pz, 0.8, 0.7, 0.3, 'deep');
+  const slot = iso(px, py + 0.35, pz + 0.3)[1] + 4;
+  if (status && ok) {
+    printer += `<g clip-path="url(#fa-slot)"><g class="print"><polygon points="${pts(iso(px + 0.15, py + 0.35, pz + 0.3), iso(px + 0.65, py + 0.35, pz + 0.3), iso(px + 0.65, py + 0.35, pz + 1.45), iso(px + 0.15, py + 0.35, pz + 1.45))}" fill="#fbeaf3"/>`
+      + [1.25, 1.08, 0.9].map((z, i) => seg(pz + z, [px + 0.22, py + 0.35], [px + (i === 2 ? 0.42 : 0.56), py + 0.35], 'stroke="#7d2f6c" stroke-width="1.5"')).join('')
+      + `</g></g><defs><clipPath id="fa-slot"><rect x="0" y="0" width="480" height="${slot.toFixed(1)}"/></clipPath></defs>`;
+  }
+  pieces.push(printer);
+
+  // the shopkeeper
+  pieces.push(robot(0.9, 4.1));
+
+  // the sale's trip: from the till up to the rack, over to the database, and back to the till
+  if (status && ok && !reduce.matches) {
+    const p0 = iso(tx + 0.5, ty - 0.2, tz + 0.9), p1 = iso(R.x + R.w / 2, R.y + R.d / 2, R.h + 0.1), p2 = iso(D[0], D[1], 1.95), p3 = iso(tx + 0.5, ty - 0.2, tz + 0.9);
+    const q = (u, v, lift) => `Q${((u[0] + v[0]) / 2).toFixed(1)} ${(Math.min(u[1], v[1]) - lift).toFixed(1)} ${v[0].toFixed(1)} ${v[1].toFixed(1)}`;
+    const path = `M${p0[0].toFixed(1)} ${p0[1].toFixed(1)} Q${(p1[0] - 110).toFixed(1)} ${(p1[1] + 10).toFixed(1)} ${p1[0].toFixed(1)} ${p1[1].toFixed(1)} ${q(p1, p2, 30)} ${q(p2, p3, 40)}`;
+    pieces.push(`<path d="${path}" fill="none" stroke="#d6f53a" stroke-width="1.5" stroke-linecap="round" pathLength="1" class="trail"/><circle r="4.5" fill="#d6f53a" class="spark" style="offset-path: path('${path}')"/>`);
+  }
+
+  const T = (k) => ` style="--i:${k}"`;
+  const [sx, sy] = [S * C * 6, S * 0.5 * 6];
+  const tiles = [1, 2, 3, 4, 5].map((i) => seg(0.001, [i, 0], [i, 6], 'stroke="rgba(241,211,228,.05)"') + seg(0.001, [0, i], [6, i], 'stroke="rgba(241,211,228,.05)"')).join('');
+  return `<svg class="fa" viewBox="50 40 380 400" style="--n:${pieces.length}">
+    <defs><filter id="fa-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+    <g class="fa-base">${box(0, 0, -0.35, 6, 6, 0.35, 'ground')}${tiles}
+      <polygon points="${flat(0, [0, 0], [6, 0], [6, 6], [0, 6])}" fill="none" stroke="rgba(241,211,228,.12)"/>
+      <polygon class="fa-edge" points="${flat(0, [0, 0], [6, 0], [6, 6], [0, 6])}" fill="none" stroke="${!status || ok ? '#d6f53a' : '#ff8a5c'}" stroke-width="2" pathLength="1"/></g>
+    ${seg(0.002, [0, 0], [0, 6], `class="fa-scan" stroke="#d6f53a" stroke-width="2" stroke-linecap="round" style="--sx:${sx.toFixed(1)}px;--sy:${sy.toFixed(1)}px"`)}
+    ${pieces.map((p, i) => `<g class="fa-in"${T(i)}><g class="fa-x">${p}</g></g>`).join('')}
+  </svg>`;
+}
+
+// The pieces follow the pointer by their depth, like the website's pictures.
+(function steer() {
+  if (!matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) return;
+  let raf = 0, target = [0, 0];
+  const cur = [0, 0];
+  const tick = () => {
+    const el = document.querySelector('#art svg');
+    cur[0] += (target[0] - cur[0]) * 0.08; cur[1] += (target[1] - cur[1]) * 0.08;
+    if (el) { el.style.setProperty('--px', cur[0].toFixed(3)); el.style.setProperty('--py', cur[1].toFixed(3)); }
+    raf = Math.abs(target[0] - cur[0]) + Math.abs(target[1] - cur[1]) > 0.002 ? requestAnimationFrame(tick) : 0;
+  };
+  addEventListener('pointermove', (e) => {
+    const el = $('art'); if (!el) return;
+    const r = el.getBoundingClientRect();
+    target = [Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (innerWidth / 2))), Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (innerHeight / 2)))];
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+})();
+// Its loops rest while the picture is off screen.
+if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { const svg = $('art').querySelector('svg'); if (svg) svg.toggleAttribute('data-off', !e.isIntersecting); }, { rootMargin: '100px' }).observe($('art'));
+
+let artKey = '';
+function paintArt(status) {
+  // Repaint only when what it shows changes, so the loops keep their rhythm between checks.
+  const key = status ? status.overall + (status.services || []).map((s) => s.shown).join() : 'loading';
+  if (key === artKey) return;
+  artKey = key;
+  $('art').innerHTML = drawArt(status);
+}
+
 /* ---------------------------------------------------------------- head */
 function renderHead(status, history, incidents) {
   const overall = HEAD[status.overall] ? status.overall : 'operational';
-  const [title, line] = HEAD[overall];
+  const [loud, quiet, line] = HEAD[overall];
   const live = (status.services || []).filter((s) => s.shown !== 'planned');
-  // Uptime over the last 30 days, across everything that is live.
   const days = [...Array(30)].map((_, i) => new Date(Date.now() - (29 - i) * 864e5).toISOString().slice(0, 10));
   let up = 0, all = 0;
   for (const s of live) for (const d of days) { const x = (history[s.id] || {})[d]; if (x) { up += x.up; all += x.checks; } }
@@ -416,21 +664,17 @@ function renderHead(status, history, incidents) {
   const since = Date.now() - 30 * 864e5;
   const outs = (Array.isArray(incidents) ? incidents : []).filter((i) => new Date(i.startedAt) >= since).length;
   const p = pctNum(up, all);
-
-  $('head').innerHTML = `
-    <div class="state is-${overall}">
-      <span class="beacon" aria-hidden="true"><i></i><i></i><i></i></span>
-      <h1>${esc(title)}</h1>
-      <p>${esc(line)}</p>
-      <div class="clock is-${overall}">
-        <div class="clock-row"><span id="clock-l"></span><b id="clock-r" class="mono"></b></div>
-        <div class="meter" id="meter"><i></i></div>
-      </div>
+  $('state').innerHTML = `
+    <h1 class="h-hero">${esc(loud)} <span class="quiet">${esc(quiet)}</span></h1>
+    <p class="lede">${esc(line)}</p>
+    <div class="facts">
+      <div class="fact"><b data-to="${p == null ? '' : p}" data-dp="2">${p == null ? '–' : `${esc(pctTxt(p))}<small>%</small>`}</b><span>Up, last 30 days</span></div>
+      <div class="fact"><b data-to="${avg ?? ''}" data-dp="0">${avg == null ? '–' : `${avg}<small>ms</small>`}</b><span>Average answer</span></div>
+      <div class="fact"><b data-to="${outs}" data-dp="0">${outs}</b><span>Outages, 30 days</span></div>
     </div>
-    <div class="tiles">
-      <div class="tile"><span>Up, last 30 days</span><b data-to="${p == null ? '' : p}" data-dp="2">${p == null ? '–' : `${esc(pctTxt(p))}<small>%</small>`}</b></div>
-      <div class="tile"><span>Average answer</span><b data-to="${avg ?? ''}" data-dp="0">${avg == null ? '–' : `${avg}<small>ms</small>`}</b></div>
-      <div class="tile"><span>Outages, 30 days</span><b data-to="${outs}" data-dp="0">${outs}</b></div>
+    <div class="clock">
+      <div class="clock-row"><span id="clock-l"></span><b id="clock-r" class="mono"></b></div>
+      <div class="meter" id="meter"><i></i></div>
     </div>`;
   tick();
 }
@@ -438,7 +682,7 @@ function renderHead(status, history, incidents) {
 // The clock under the head: when the last check landed and when the next one is due.
 function tick() {
   if (!last) return;
-  const l = $('clock-l'), r = $('clock-r'), m = $('meter'), map = $('map');
+  const l = $('clock-l'), r = $('clock-r'), m = $('meter');
   if (!l) return;
   const t = new Date(last.status.checkedAt).getTime();
   const since = (Date.now() - t) / 60000;
@@ -447,24 +691,22 @@ function tick() {
   l.title = fmtWhen(last.status.checkedAt);
   if (since > STALE_MIN) {
     r.className = 'late'; r.textContent = 'Checks are running late';
-    m.classList.remove('is-busy'); m.style.setProperty('--p', 1); m.style.setProperty('--c', 'var(--b-warn)');
-    map.classList.remove('is-checking');
+    m.classList.remove('is-busy'); m.style.setProperty('--p', 1); m.style.setProperty('--c', 'var(--coral)');
   } else if (left <= 0) {
     r.className = 'mono dots'; r.textContent = 'Checking now';
-    m.classList.add('is-busy'); map.classList.add('is-checking');
+    m.classList.add('is-busy');
   } else {
     const s = Math.ceil(left / 1000);
     r.className = 'mono'; r.textContent = `Next in ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
     m.classList.remove('is-busy'); m.style.removeProperty('--c');
     m.style.setProperty('--p', Math.min(1, 1 - left / (EVERY_MIN * 60000)).toFixed(4));
-    map.classList.remove('is-checking');
   }
 }
 
 // Figures count up to their value once, on the first paint.
 function countUp() {
   if (reduce.matches) return;
-  document.querySelectorAll('.tile b[data-to]').forEach((b) => {
+  document.querySelectorAll('.fact b[data-to]').forEach((b) => {
     const to = parseFloat(b.dataset.to);
     if (!isFinite(to)) return;
     const dp = +b.dataset.dp, unit = b.querySelector('small')?.outerHTML || '';
@@ -479,111 +721,43 @@ function countUp() {
   });
 }
 
-/* ---------------------------------------------------------------- map */
-function renderMap(status, beat) {
-  const svcs = status.services || [];
-  const tiers = TIERS.map((groups, i) => i === 0 ? [{ id: '_shops', name: 'Shops', shown: 'source' }] : svcs.filter((s) => groups.includes(s.group)));
-  const placed = new Set(tiers.flat().map((s) => s.id));
-  const extra = svcs.filter((s) => !placed.has(s.id));
-  tiers[3] = tiers[3].concat(extra);   // anything new lands with the background jobs
-  const chip = (s) => {
-    if (s.shown === 'source') return `<div class="chip is-source" data-id="_shops"><span class="dot"></span><b>Shops</b><small>Any device</small></div>`;
-    const shown = WORD[s.shown] ? s.shown : 'planned';
-    const sub = shown === 'planned' ? 'Not live yet' : shown === 'down' ? (s.note || 'Not answering') : msTxt(s.ms);
-    return `<div class="chip is-${shown}${beat && shown !== 'planned' ? ' beat' : ''}" data-id="${esc(s.id)}" title="${esc(s.name)}: ${esc(WORD[shown])}">
-      <span class="dot"></span><b>${esc(SHORT[s.id] || s.name)}</b><small${shown === 'up' || shown === 'slow' ? ' class="mono"' : ''}>${esc(sub)}</small></div>`;
-  };
-  $('tiers').innerHTML = tiers.map((list, i) => `<div class="tier"><p class="tier-t">${TIER_NAME[i]}</p>${list.map(chip).join('')}</div>`).join('');
-  const liveN = svcs.filter((s) => s.shown !== 'planned').length;
-  $('map-note').innerHTML = `<span class="mono">${liveN}</span> of <span class="mono">${svcs.length}</span> live`;
-  drawWires();
-  const map = $('map');
-  if (beat && !reduce.matches) { map.classList.remove('scanning'); void map.offsetWidth; map.classList.add('scanning'); }
-}
-
-// Wires between the layers, drawn from where the chips actually sit, so the same
-// map runs left to right on a computer and top to bottom on a phone.
-function drawWires() {
-  const map = $('map'), svg = $('wires');
-  const box = map.getBoundingClientRect();
-  map.style.setProperty('--w', `${box.width + 120}px`);
-  svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
-  const tiers = [...map.querySelectorAll('.tier')].map((t) => [...t.querySelectorAll('.chip')].map((c) => {
-    const r = c.getBoundingClientRect();
-    return { el: c, l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top, cx: (r.left + r.right) / 2 - box.left, cy: (r.top + r.bottom) / 2 - box.top };
-  }));
-  if (tiers.length < 2 || tiers.some((t) => !t.length)) { svg.innerHTML = ''; return; }
-  const across = tiers[1][0].l > tiers[0][0].r;   // side by side, or stacked
-  const kind = (c) => (c.el.classList.contains('is-down') ? 'cut' : c.el.classList.contains('is-planned') ? 'idle' : c.el.classList.contains('is-slow') ? 'flow is-slow' : 'flow');
-  const out = [];
-  if (!across) {
-    // Stacked (a phone): one line runs down the left and every chip branches off it.
-    const all = tiers.flat(), x = Math.min(...all.map((c) => c.l)) - 14;
-    const lo = all[0].cy, hi = all[all.length - 1].cy;
-    out.push(`<path class="rail" d="M${x} ${lo}V${hi}"/>`, `<path class="flow is-in" d="M${x} ${lo}V${hi}"/>`);
-    for (const c of all) out.push(`<path class="${c.el.classList.contains('is-source') ? 'flow is-in' : kind(c)}" d="M${x} ${c.cy}H${c.l}"/>`);
-    svg.innerHTML = out.join('');
-    return;
-  }
-  for (let k = 1; k < tiers.length; k++) {
-    const a = tiers[k - 1], b = tiers[k];
-    // The bus sits halfway between the two layers.
-    const bus = across ? (Math.max(...a.map((c) => c.r)) + Math.min(...b.map((c) => c.l))) / 2
-                       : (Math.max(...a.map((c) => c.b)) + Math.min(...b.map((c) => c.t))) / 2;
-    const ends = [...a, ...b].map((c) => (across ? c.cy : c.cx));
-    const lo = Math.min(...ends), hi = Math.max(...ends);
-    out.push(across ? `<path class="rail" d="M${bus} ${lo}V${hi}"/>` : `<path class="rail" d="M${lo} ${bus}H${hi}"/>`);
-    // Into the bus from the layer above: the flow continues only from chips that answer.
-    for (const c of a) {
-      const live = !c.el.classList.contains('is-planned') && !c.el.classList.contains('is-down');
-      const cls = live ? 'flow is-in' : 'idle';
-      out.push(across ? `<path class="${cls}" d="M${c.r} ${c.cy}H${bus}"/>` : `<path class="${cls}" d="M${c.cx} ${c.b}V${bus}"/>`);
-    }
-    // Out of the bus to each chip below, coloured by how that chip is doing.
-    for (const c of b) {
-      out.push(across ? `<path class="${kind(c)}" d="M${bus} ${c.cy}H${c.l}"/>` : `<path class="${kind(c)}" d="M${c.cx} ${bus}V${c.t}"/>`);
-    }
-  }
-  svg.innerHTML = out.join('');
-}
-new ResizeObserver(() => { if (last) drawWires(); }).observe($('map'));
-
 /* ---------------------------------------------------------------- list */
 function render(data) {
   const { status, history, incidents } = data;
-  const beat = !last || last.status.checkedAt !== status.checkedAt;
   last = data;
+  $('parts').hidden = false;
   renderHead(status, history, incidents);
-  renderMap(status, beat);
-  if (firstPaint) countUp();
+  paintArt(status);
+  if (firstPaint) { countUp(); scramble($('eyebrow'), 'System status'); }
 
   const days = [...Array(90)].map((_, i) => new Date(Date.now() - (89 - i) * 864e5).toISOString().slice(0, 10));
   const groups = {};
   for (const s of status.services || []) (groups[s.group || 'Services'] ??= []).push(s);
   let n = 0;
-  $('groups').innerHTML = Object.entries(groups).map(([g, list]) => `
-    <section class="group"><h2>${esc(g)}</h2><div class="pane" style="--n:${n++}">${list.map((s) => svc(s, history[s.id] || {}, days, n)).join('')}</div></section>`).join('');
-  $('key').hidden = false;
+  $('groups').innerHTML = Object.entries(groups).map(([g, list]) => {
+    const liveN = list.filter((s) => s.shown !== 'planned').length, okN = list.filter((s) => s.shown === 'up' || s.shown === 'slow').length;
+    const sub = !liveN ? 'Not live yet' : `${okN} of ${liveN} working`;
+    return `<div class="group"><h3>${esc(GROUP[g] || g)}<small>${esc(sub)}</small></h3><ul>${list.map((s) => svc(s, history[s.id] || {}, days, n++)).join('')}</ul></div>`;
+  }).join('');
   const groupsEl = $('groups');
-  if (firstPaint && !reduce.matches) { groupsEl.classList.add('enter'); setTimeout(() => groupsEl.classList.remove('enter'), 2200); }
+  if (firstPaint && !reduce.matches) { groupsEl.classList.add('enter'); setTimeout(() => groupsEl.classList.remove('enter'), 2400); }
 
   const out = $('incidents');
   const list = Array.isArray(incidents) ? incidents : [];
   $('outages').hidden = false;
   if (!list.length) {
-    out.innerHTML = `<div class="empty"><h3>No outages so far</h3><p>When something goes down, it shows here with how long it lasted.</p></div>`;
+    out.innerHTML = `<div class="none"><h3>No outages so far</h3><p>When a part goes down, it shows here with how long it lasted.</p></div>`;
   } else {
     const shown = showAll ? list.slice(0, 200) : list.slice(0, SHOW_OUTAGES);
-    out.innerHTML = shown.map((i) => `
-      <div class="out">
-        <div class="out-top">
-          <span class="out-name">${esc(i.name)}</span>
-          ${i.resolvedAt
-            ? `<span class="out-len">Down for <span class="mono">${esc(lasted(i.startedAt, i.resolvedAt))}</span></span>`
-            : `<span class="status is-down is-live">Not working now</span>`}
-        </div>
-        <div class="out-meta"><span class="mono">${esc(fmtWhen(i.startedAt))}</span>${i.cause ? ` · ${esc(i.cause)}` : ''}${i.issue ? ` · <a href="${REPO}/issues/${encodeURIComponent(i.issue)}" target="_blank" rel="noopener">Details</a>` : ''}</div>
-      </div>`).join('') + (list.length > shown.length ? `<button class="more" type="button" id="more">Show all <span class="mono">${list.length}</span></button>` : '');
+    out.innerHTML = `<ol class="outs">${shown.map((i) => `
+      <li class="out">
+        <span class="out-when">${esc(fmtWhen(i.startedAt))}</span>
+        <span class="out-name">${esc(i.name)}</span>
+        ${i.resolvedAt
+          ? `<span class="out-len">Down for <span class="mono">${esc(lasted(i.startedAt, i.resolvedAt))}</span></span>`
+          : `<span class="out-len"><span class="status is-down is-live">Not working now</span></span>`}
+        ${i.cause || i.issue ? `<span class="out-why">${esc(i.cause || '')}${i.cause && i.issue ? ' · ' : ''}${i.issue ? `<a href="${REPO}/issues/${encodeURIComponent(i.issue)}" target="_blank" rel="noopener">Details</a>` : ''}</span>` : ''}
+      </li>`).join('')}</ol>` + (list.length > shown.length ? `<button class="more ulink" type="button" id="more">Show all <span class="mono">${list.length}</span></button>` : '');
     const more = $('more');
     if (more) more.onclick = () => { showAll = true; render(last); };
   }
@@ -593,27 +767,28 @@ function render(data) {
 
 function svc(s, hist, days, n) {
   const shown = WORD[s.shown] ? s.shown : 'planned';
-  const why = shown === 'planned' || shown === 'down' ? s.note : '';
+  const why = shown === 'down' && s.note ? `${s.note}. ` : '';
+  const what = WHAT[s.id] || '';
   if (shown === 'planned') {
-    return `<div class="svc"><div class="svc-top"><span class="svc-name">${esc(s.name)}</span><span class="status is-planned">${WORD[shown]}</span></div>${why ? `<p class="svc-why">${esc(why)}</p>` : ''}</div>`;
+    return `<li class="svc"><div class="svc-top"><div><p class="svc-name">${esc(s.name)}</p><p class="svc-why">${esc(what)}${what && s.note ? ' ' : ''}${esc(s.note ? `${s.note}.` : '')}</p></div><span class="svc-end"><span class="status is-planned">${WORD[shown]}</span></span></div></li>`;
   }
   const sum = (from) => days.slice(from).reduce((a, d) => (hist[d] ? [a[0] + hist[d].up, a[1] + hist[d].checks] : a), [0, 0]);
   const [u90, a90] = sum(0), [u30, a30] = sum(60);
   const bars = days.map((d, i) => {
     const x = hist[d];
-    const c = !x || !x.checks ? '' : x.up / x.checks >= 0.999 ? 'var(--good)' : x.up / x.checks >= 0.95 ? 'var(--warn)' : 'var(--bad)';
-    return `<i data-d="${d}"${i < 60 ? ' class="old"' : ''}${c ? ` style="--c:${c}"` : ''}></i>`;
+    const c = !x || !x.checks ? '' : x.up / x.checks >= 0.999 ? 'ok' : x.up / x.checks >= 0.95 ? 'dip' : 'bad';
+    const cls = [c, i < 60 ? 'old' : ''].filter(Boolean).join(' ');
+    return `<i data-d="${d}"${cls ? ` class="${cls}"` : ''}></i>`;
   }).join('');
   const label = a90 ? `${s.name}: ${pct(u90, a90)} over the last 90 days` : `${s.name}: no days checked yet`;
   const ms = shown !== 'down' ? msTxt(s.ms) : '';
-  return `<div class="svc" data-id="${esc(s.id)}">
-    <div class="svc-top"><span class="svc-name">${esc(s.name)}</span>
+  return `<li class="svc" data-id="${esc(s.id)}">
+    <div class="svc-top"><div><p class="svc-name">${esc(s.name)}</p><p class="svc-why">${esc(why)}${esc(what)}</p></div>
       <span class="svc-end">${ms ? `<span class="svc-ms">${esc(ms)}</span>` : ''}<span class="status is-${shown}${shown === 'down' ? ' is-live' : ''}">${esc(WORD[shown])}</span></span></div>
-    ${why ? `<p class="svc-why">${esc(why)}</p>` : ''}
     <div class="bars" role="img" aria-label="${esc(label)}" style="--n:${n}">${bars}</div>
     <div class="legend" aria-hidden="true"><span><span class="d90">90 days ago</span><span class="d30">30 days ago</span></span>
       <span class="day"><span class="mono p90">${esc(pct(u90, a90))}</span><span class="mono p30">${esc(pct(u30, a30))}</span></span><span>Today</span></div>
-  </div>`;
+  </li>`;
 }
 
 // Point at (or tap) a day to read it in the middle of the legend.
@@ -642,19 +817,35 @@ groupsEl.addEventListener('pointerleave', () => groupsEl.querySelectorAll('.svc'
 function failed() {
   // Keep what is already on screen if a background refresh fails.
   if (last) return;
-  $('head').innerHTML = `<div class="empty" style="text-align: left">
-    <h3>Can't load the status right now</h3>
-    <p>Check your internet connection, then try again.</p>
-    <button class="btn" type="button" id="retry">Try again</button></div>`;
-  $('map').hidden = true;
-  $('groups').innerHTML = '';
+  $('state').innerHTML = `<h1 class="h-hero">Can't load the status. <span class="quiet">Check your connection.</span></h1>
+    <p class="lede">This page reads the latest check from GitHub. Try again in a moment.</p>
+    <button class="cta" type="button" id="retry"><span class="cta-fill"></span>Try again</button>`;
+  $('parts').hidden = true;
   $('main').setAttribute('aria-busy', 'false');
-  $('retry').onclick = (e) => { e.target.disabled = true; e.target.textContent = 'Trying…'; $('map').hidden = false; refresh(); };
+  $('retry').onclick = (e) => { const b = e.currentTarget; b.disabled = true; b.lastChild.textContent = 'Trying…'; refresh(); };
 }
+
+/* ---------------------------------------------------------------- the button's fill starts where the pointer came in */
+document.addEventListener('pointerover', (e) => {
+  const b = e.target.closest && e.target.closest('.cta');
+  if (!b || b.contains(e.relatedTarget)) return;
+  const r = b.getBoundingClientRect();
+  b.style.setProperty('--x', `${e.clientX - r.left}px`); b.style.setProperty('--y', `${e.clientY - r.top}px`);
+});
+
+/* ---------------------------------------------------------------- the receipt's barcode, drawn from the word's letters (as on the website) */
+(function barcode() {
+  const bars = 'KOWNTX'.split('').flatMap((c) => { const n = c.charCodeAt(0); return [1 + (n % 3), 1 + ((n >> 2) % 2), 1 + ((n >> 1) % 3)]; });
+  let x = 0, out = '';
+  bars.forEach((w, i) => { if (i % 2 === 0) out += `<rect x="${x}" y="0" width="${w}" height="24" fill="currentColor"/>`; x += w * 2; });
+  const svg = $('barcode'); svg.setAttribute('viewBox', `0 0 ${x} 24`); svg.innerHTML = out;
+  $('year').textContent = new Date().getFullYear();
+})();
 
 // window.KX_SOURCE lets a preview feed the page sample data; the live page reads the repo.
 const source = () => (typeof window.KX_SOURCE === 'function' ? window.KX_SOURCE() : fromRepo());
 function refresh() { return source().then(render, failed); }
+paintArt(null);
 refresh();
 setInterval(tick, 1000);
 setInterval(() => { if (!document.hidden) refresh(); }, 30000);
