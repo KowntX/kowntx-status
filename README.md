@@ -1,4 +1,4 @@
-# Kownt X status
+# KowntX status
 
 Live page: https://kowntx.github.io/kowntx-status/
 
@@ -22,7 +22,7 @@ No keys or secrets are needed or stored: an answer below 500 (including
 
 ## The page
 
-`site/` is a plain static page in the Kownt X design (Kountour colours and type,
+`site/` is a plain static page in the KowntX design (Kountour colours and type,
 the Gold coin wordmark on the plum bar, light and dark following the device).
 Its fonts and logo sit next to it in `site/fonts` and `site/brand`, with no
 libraries or CDNs, so it stays up when everything else is down. It works on
