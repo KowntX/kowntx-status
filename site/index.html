@@ -26,8 +26,7 @@
   The picture is a map of every part, named: the shop's counter at the front, then
   the app, the database, sign-in and the website, then the background jobs. Wires
   flow lime while a part answers and go coral when it stops; a part that isn't live
-  yet is only a dashed outline; the till rings a sale that runs to the app and the
-  database and back.
+  yet is only a dashed outline; the till's total lights as each sale goes through.
   Everything is still under reduced motion. The logo never moves.
 
   Everything this page needs lives next to it (fonts, logo, no libraries), so it
@@ -170,22 +169,16 @@
   @keyframes fa-edge { 0% { stroke-dashoffset: 1; opacity: 1; } 70% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: .25; } }
   @keyframes fa-in { 0% { opacity: 0; transform: translateY(8px); filter: blur(3px); } 60% { filter: blur(0); } 100% { opacity: 1; transform: none; filter: none; } }
   .fa[data-off] * { animation-play-state: paused !important; }
-  /* one light per service on the rack: lime breathing while it answers, coral blinking when it doesn't */
+  /* one light per part: lime breathing while it answers, coral blinking when it doesn't */
   .fa .led { animation: led 2.8s ease-in-out infinite; animation-delay: calc(var(--k) * -.37s); }
   .fa .led.is-down { animation: led-down .8s steps(2, jump-none) infinite; }
   .fa .led.is-off { animation: none; }
   @keyframes led { 50% { opacity: .45; } }
   @keyframes led-down { 50% { opacity: .2; } }
-  /* the sale: rung up, printed, sent to the rack and the database, and back */
-  .fa .spark { offset-rotate: 0deg; animation: run 4.2s cubic-bezier(.65, 0, .35, 1) infinite; }
-  .fa .trail { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trail 4.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+  /* the sale: the till's total lights as it is rung up; the wires carry it */
   .fa .ring { animation: ring 4.2s ease infinite; }
-  .fa .print { animation: print 4.2s cubic-bezier(.3, .7, .3, 1) infinite; }
   .fa .flow { stroke-dasharray: 3 9; animation: flow 1.6s linear infinite; }
-  @keyframes run { 0%, 8% { offset-distance: 0%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 96%, 100% { offset-distance: 100%; opacity: 0; } }
-  @keyframes trail { 0%, 8% { stroke-dashoffset: 1; opacity: .9; } 90% { stroke-dashoffset: 0; opacity: .6; } 100% { stroke-dashoffset: 0; opacity: 0; } }
   @keyframes ring { 0%, 4% { opacity: .25; } 10%, 30% { opacity: 1; } 45%, 100% { opacity: .25; } }
-  @keyframes print { 0%, 10% { transform: translateY(40px); opacity: 1; } 55%, 85% { transform: none; opacity: 1; } 100% { transform: none; opacity: 0; } }
   @keyframes flow { to { stroke-dashoffset: -24; } }
   .fa .stuck { animation: led-down 1.2s steps(2, jump-none) infinite; }
   .fa .build { animation: flow 3.2s linear infinite reverse; }
@@ -199,7 +192,7 @@
   .map-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin-top: 4px; font-size: 13px; color: var(--ink-3); }
   .map-key span { display: inline-flex; align-items: center; gap: 8px; }
   .map-key svg { width: 22px; height: 12px; overflow: visible; }
-  @media (max-width: 600px) { .fa .lab { font-size: 12.5px; } .map-key { font-size: 12.5px; gap: 4px 14px; } }
+  @media (max-width: 600px) { .fa .lab { font-size: 13px; } .map-key { font-size: 12.5px; gap: 4px 14px; } }
 
   /* ------------------------------------------------------------ the list (Trust center layout) */
   .sec { padding: 80px 0; }
@@ -322,7 +315,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
-    .fa .spark, .fa .trail, .fa .fa-scan { opacity: 0; }
+    .fa .fa-scan { opacity: 0; }
     .fa .fa-edge { stroke-dashoffset: 0; opacity: .25; }
   }
 </style>
@@ -510,7 +503,7 @@ function scramble(el, text, ms = 700) {
    boxes drawn as a top and the two faces that look at the viewer. */
 const SVGNS = 'http://www.w3.org/2000/svg';
 const S = 26, C = Math.cos(Math.PI / 6), N = 8;   // 26 px a map unit, on an 8 x 8 floor
-const iso = (x, y, z = 0) => [240 + (x - y) * S * C, 112 + (x + y) * S * 0.5 - z * S];
+const iso = (x, y, z = 0) => [240 + (x - y) * S * C, 88 + (x + y) * S * 0.5 - z * S];
 const pts = (...p) => p.map(([a, b]) => `${a.toFixed(1)},${b.toFixed(1)}`).join(' ');
 const flat = (z, ...xy) => pts(...xy.map(([a, b]) => iso(a, b, z)));
 const TONE = {
@@ -535,151 +528,121 @@ function disc(x, y, z, r, h, body, cap) {
     + `<rect x="${cx - rx * 0.15}" y="${top}" width="${rx * 0.5}" height="${h * S}" fill="rgba(255,255,255,.12)"/>`
     + `<ellipse cx="${cx}" cy="${top}" rx="${rx}" ry="${ry}" fill="${cap}"/>`;
 }
-// KowntX's stand-in for a person: a white robot, its visor toward +x.
-function robot(x, y) {
-  const visor = pts(iso(x + 0.7, y + 0.06, 1.02), iso(x + 0.7, y + 0.46, 1.02), iso(x + 0.7, y + 0.46, 1.2), iso(x + 0.7, y + 0.06, 1.2));
-  const [ax, ay] = iso(x + 0.35, y + 0.25, 1.34);
-  return box(x + 0.1, y + 0.05, 0, 0.5, 0.42, 0.78, 'blush') + box(x, y - 0.02, 0.84, 0.7, 0.54, 0.5, 'blush', true)
-    + `<polygon points="${visor}" fill="#3d0f35"/><line x1="${ax}" y1="${ay}" x2="${ax}" y2="${ay - 10}" stroke="#d9b8cc" stroke-width="2"/><circle cx="${ax}" cy="${ay - 11}" r="2.6" fill="#d9b8cc"/>`;
-}
-// The map: where each part stands on the floor, from the shop at the front to the
-// background jobs at the back (the same layers as the list below). u runs across
-// the picture, v from back to front; a new service lands in a spare spot.
-const LAYOUT = {
-  shop: { u: -3.2, v: 11.4, w: 0.9, h: 0.7, kind: 'shop', short: 'Shop pages' },
-  app: { u: -5.0, v: 8.0, w: 1.0, h: 0.95, kind: 'app', short: 'App' },
-  database: { u: -1.7, v: 8.0, w: 1.0, h: 1.2, kind: 'db', short: 'Database' },
-  auth: { u: 1.7, v: 8.0, w: 0.8, h: 0.8, kind: 'auth', short: 'Sign-in' },
-  website: { u: 5.0, v: 8.0, w: 0.9, h: 1.2, kind: 'web', short: 'Website' },
-  payments: { u: -3.6, v: 4.6, w: 0.7, h: 0.55, kind: 'job', short: 'Payment links', above: true },
-  upi: { u: 0, v: 4.6, w: 0.7, h: 0.55, kind: 'job', short: 'Confirmations', above: true, lift: 1.55 },
-  push: { u: 3.6, v: 4.6, w: 0.7, h: 0.55, kind: 'job', short: 'Notifications', above: true },
-};
-const SPARE = [{ u: -1.8, v: 2.4 }, { u: 1.8, v: 2.4 }, { u: 0, v: 1.2 }, { u: 4.4, v: 11 }];
-const LINKS = [['_shops', 'app'], ['_shops', 'shop'], ['_shops', 'website'], ['app', 'database'], ['app', 'auth'], ['shop', 'database'], ['database', 'payments'], ['database', 'upi'], ['auth', 'push']];
-const SHOPS = { u: 1.0, v: 12.6 };
+// The map, in the same layers as the list below: the shop at the front, what it
+// opens, what that runs on, and the background jobs at the back. Each layer is a
+// row across the floor (u runs across, v from back to front), rows take turns
+// between two sets of columns so a name never sits under the part in front of it,
+// and the wires run straight: down from each part to a line between the rows.
+const ROWS = [
+  { v: 13.0, ids: ['_shops'], us: [2.0], name: 'below' },
+  { v: 10.0, ids: ['app', 'shop', 'website'], us: [-4, 0, 4], name: 'below' },
+  { v: 7.2, ids: ['database', 'auth'], us: [-2, 2], name: 'above' },
+  { v: 4.6, ids: ['payments', 'upi', 'push'], us: [-4, 0, 4], name: 'above' },
+];
+const KIND = { app: 'app', shop: 'shop', website: 'web', database: 'db', auth: 'auth' };
+const SHORT_NAME = { _shops: 'Your shop', app: 'App', shop: 'Shop pages', website: 'Website', database: 'Database', auth: 'Sign-in', payments: 'Payment links', upi: 'Confirmations', push: 'Notifications' };
 const at = (u, v) => [(v + u) / 2, (v - u) / 2];   // map x, y from across and depth
+const W = 0.9, H = 0.62;                            // every part has the same footprint
 
 function drawArt(status) {
   // before the first check lands, every part stands in grey
-  const svcs = (status && status.services) || Object.keys(LAYOUT).map((id) => ({ id, name: LAYOUT[id].short }));
+  const svcs = (status && status.services) || ROWS.slice(1).flatMap((r) => r.ids).map((id) => ({ id, name: SHORT_NAME[id] }));
   const overall = status ? status.overall : 'loading';
   const ok = overall === 'operational' || overall === 'degraded';
-  const byId = Object.fromEntries(svcs.map((s) => [s.id, s]));
-  let spare = 0;
-  const nodes = svcs.map((s) => {
-    const L = LAYOUT[s.id] || { ...SPARE[spare++ % SPARE.length], w: 0.8, h: 0.6, kind: 'job', short: s.name };
-    const [cx, cy] = at(L.u, L.v);
-    return { s, L, cx, cy, x: cx - L.w / 2, y: cy - L.w / 2, state: !status ? 'off' : s.shown };
-  });
-  const node = Object.fromEntries(nodes.map((n) => [n.s.id, n]));
-  const live = (st) => st === 'up' || st === 'slow';
   const color = { up: '#d6f53a', slow: '#ff8a5c', down: '#ff8a5c', planned: '#b48aa6', off: '#7d2f6c' };
+
+  // place every service: in its row when it has one, else in the back row's next free column
+  const rows = ROWS.map((r) => ({ v: r.v, name: r.name, nodes: [] }));
+  // the shop keeps selling whatever is down (bills wait on the phone), so its own wire stays live
+  rows[0].nodes.push({ id: '_shops', u: ROWS[0].us[0], state: status ? 'up' : 'off' });
+  const extra = [];
+  for (const s of svcs) {
+    const k = ROWS.findIndex((r) => r.ids.includes(s.id));
+    const n = { id: s.id, s, state: !status ? 'off' : WORD[s.shown] ? s.shown : 'planned' };
+    if (k > 0) { n.u = ROWS[k].us[ROWS[k].ids.indexOf(s.id)]; rows[k].nodes.push(n); } else extra.push(n);
+  }
+  extra.forEach((n, i) => { n.u = [-2, 2][i % 2]; rows[3].nodes.push(n); });
+  for (const r of rows) for (const n of r.nodes) [n.cx, n.cy] = at(n.u, r.v);
+  const all = rows.flatMap((r) => r.nodes);
   const pieces = [];
 
-  // the wires along the floor: flowing lime while both ends answer, coral and still to
-  // a part that is down, a faint dotted line to a part that isn't live yet
-  const [shx, shy] = at(SHOPS.u, SHOPS.v);
-  let wires = '';
-  for (const [a, b] of LINKS) {
-    const A = a === '_shops' ? { cx: shx, cy: shy, state: status ? 'up' : 'off' } : node[a], B = node[b];
-    if (!A || !B) continue;
-    const st = !status ? 'off' : B.state === 'planned' ? 'planned' : B.state === 'down' || A.state === 'down' ? 'down' : 'up';
+  // the wires, drawn on the floor before anything stands on it
+  const lineUV = (u0, v0, u1, v1, st) => {
+    const [a, b] = [at(u0, v0), at(u1, v1)];
     const attrs = st === 'up' ? 'stroke="#d6f53a" stroke-width="1.6" class="flow"'
       : st === 'down' ? 'stroke="#ff8a5c" stroke-width="1.6" stroke-dasharray="2 5"'
-      : st === 'planned' ? 'stroke="#b48aa6" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="1 5" stroke-linecap="round"'
-      : 'stroke="rgba(241,211,228,.16)" stroke-width="1.4"';
-    wires += seg(0.01, [A.cx, A.cy], [B.cx, B.cy], attrs);
+      : st === 'planned' ? 'stroke="#b48aa6" stroke-opacity=".6" stroke-width="1.2" stroke-dasharray="1 5" stroke-linecap="round"'
+      : 'stroke="rgba(241,211,228,.18)" stroke-width="1.4"';
+    return seg(0.01, a, b, attrs);
+  };
+  const wireState = (st) => (st === 'up' || st === 'slow' ? 'up' : st);
+  let wires = '';
+  for (let k = 0; k + 1 < rows.length; k++) {
+    const front = rows[k].nodes, back = rows[k + 1].nodes;
+    if (!front.length || !back.length) continue;
+    const bus = (rows[k].v + rows[k + 1].v) / 2;
+    const us = [...front, ...back].map((n) => n.u);
+    const feeding = front.some((n) => wireState(n.state) === 'up');
+    const busSt = !status ? 'off' : feeding ? 'up' : 'down';
+    wires += lineUV(Math.min(...us), bus, Math.max(...us), bus, busSt);
+    for (const n of front) wires += lineUV(n.u, rows[k].v, n.u, bus, !status ? 'off' : wireState(n.state) === 'up' ? 'up' : n.state === 'planned' ? 'planned' : 'down');
+    for (const n of back) wires += lineUV(n.u, bus, n.u, rows[k + 1].v, !status ? 'off' : n.state === 'planned' ? 'planned' : !feeding || n.state === 'down' ? 'down' : 'up');
   }
   pieces.push(wires);
 
-  // the parts, back to front so the nearer ones stand in front
-  const order = [...nodes].sort((p, q) => p.cx + p.cy - (q.cx + q.cy));
-  const light = (n, z) => {
-    const [lx, ly] = iso(n.cx, n.cy, z + 0.28);
-    const cls = n.state === 'down' ? 'led is-down' : n.state === 'off' ? 'led is-off' : 'led';
-    return `<line x1="${lx.toFixed(1)}" y1="${(ly + 7).toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(ly + 2).toFixed(1)}" stroke="#d9b8cc" stroke-width="1.2"/><circle class="${cls}" style="--k:${nodes.indexOf(n)}" cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3.2" fill="${color[n.state]}"/>`;
-  };
-  for (const n of order) {
-    const { L, x, y } = n, w = L.w, h = L.h;
-    if (n.state === 'planned') {
-      // not live yet: only its outline, drawn in dashes, slowly marching, like a part being built
-      const f = (z) => [iso(x, y, z), iso(x + w, y, z), iso(x + w, y + w, z), iso(x, y + w, z)];
-      const b = f(0), t = f(h);
-      let g = `<polygon points="${pts(...b)}" fill="rgba(241,211,228,.05)" stroke="#b48aa6" stroke-width="1.2" stroke-dasharray="3 4" class="build"/>`;
-      g += `<polygon points="${pts(...t)}" fill="none" stroke="#b48aa6" stroke-width="1.2" stroke-dasharray="3 4" class="build"/>`;
-      for (const k of [0, 1, 2, 3]) g += `<line x1="${b[k][0].toFixed(1)}" y1="${b[k][1].toFixed(1)}" x2="${t[k][0].toFixed(1)}" y2="${t[k][1].toFixed(1)}" stroke="#b48aa6" stroke-width="1.2" stroke-dasharray="3 4" class="build"/>`;
-      pieces.push(g);
-      continue;
-    }
+  // the parts, back row first so the nearer ones stand in front
+  for (const r of [...rows].reverse()) {
     let g = '';
-    if (L.kind === 'db') {
-      const r = w / 2;
-      g += disc(n.cx, n.cy, 0, r, 0.38, '#4a1342', '#682059') + disc(n.cx, n.cy, 0.46, r, 0.38, '#4a1342', '#682059') + disc(n.cx, n.cy, 0.92, r, 0.38, '#4a1342', '#682059');
-      g += light(n, 1.3);
-    } else {
-      g += box(x, y, 0, w, w, h, L.kind === 'shop' ? 'blush' : 'plum');
-      if (L.kind === 'app') {
-        // a screen on its front face, its total lit
-        const q = (u0, u1, z0, z1) => pts(iso(x + u0, y + w, z0), iso(x + u1, y + w, z0), iso(x + u1, y + w, z1), iso(x + u0, y + w, z1));
-        g += `<polygon points="${q(0.14, w - 0.14, 0.2, h - 0.16)}" fill="#fbeaf3"/>`;
-        [0.68, 0.54, 0.4].forEach((z) => { g += `<polygon points="${q(0.24, w - 0.36, z, z + 0.05)}" fill="#c9a3ba"/>`; });
-        g += `<polygon points="${q(0.24, w - 0.24, 0.26, 0.33)}" fill="${n.state === 'down' ? '#ff8a5c' : '#3d0f35'}"/>`;
-      } else if (L.kind === 'shop') {
-        // an awning in two stripes over its front
-        for (let i = 0; i < 4; i++) {
-          const u0 = (w / 4) * i, u1 = (w / 4) * (i + 1);
-          g += `<polygon points="${pts(iso(x + u0, y + w, h), iso(x + u1, y + w, h), iso(x + u1, y + w + 0.22, h - 0.22), iso(x + u0, y + w + 0.22, h - 0.22))}" fill="${i % 2 ? '#fbeaf3' : '#7d2f6c'}"/>`;
-        }
-      } else if (L.kind === 'web') {
-        // windows down its front
-        for (const z of [0.95, 0.65, 0.35]) for (const u0 of [0.18, 0.58]) {
-          g += `<polygon points="${pts(iso(x + u0, y + w, z), iso(x + u0 + 0.24, y + w, z), iso(x + u0 + 0.24, y + w, z + 0.18), iso(x + u0, y + w, z + 0.18))}" fill="#2e0b28"/>`;
-        }
-      } else if (L.kind === 'auth') {
-        // a keyhole on its front
-        const [kx, ky] = iso(x + w / 2, y + w, h * 0.55);
-        g += `<circle cx="${kx.toFixed(1)}" cy="${(ky - 3).toFixed(1)}" r="3.4" fill="#24081f"/><polygon points="${pts([kx - 2, ky - 1], [kx + 2, ky - 1], [kx + 3, ky + 7], [kx - 3, ky + 7])}" fill="#24081f"/>`;
+    for (const n of r.nodes) {
+      const x = n.cx - W / 2, y = n.cy - W / 2;
+      if (n.id === '_shops') { g += counter(n, status, ok); continue; }
+      if (n.state === 'planned') {
+        // not live yet: only its outline, in dashes that slowly march, like a part being built
+        const f = (z) => [iso(x, y, z), iso(x + W, y, z), iso(x + W, y + W, z), iso(x, y + W, z)];
+        const b = f(0), t = f(H);
+        const dash = 'stroke="#b48aa6" stroke-width="1.2" stroke-dasharray="3 4" class="build"';
+        g += `<polygon points="${pts(...b)}" fill="rgba(241,211,228,.04)" ${dash}/><polygon points="${pts(...t)}" fill="none" ${dash}/>`;
+        for (const k of [1, 2, 3]) g += `<line x1="${b[k][0].toFixed(1)}" y1="${b[k][1].toFixed(1)}" x2="${t[k][0].toFixed(1)}" y2="${t[k][1].toFixed(1)}" ${dash}/>`;
+        continue;
       }
-      g += light(n, h);
+      const kind = KIND[n.id] || 'job';
+      if (kind === 'db') {
+        g += disc(n.cx, n.cy, 0, W / 2, 0.17, '#4a1342', '#682059') + disc(n.cx, n.cy, 0.23, W / 2, 0.17, '#4a1342', '#682059') + disc(n.cx, n.cy, 0.46, W / 2, 0.17, '#4a1342', '#682059');
+      } else {
+        g += box(x, y, 0, W, W, H, 'plum');
+        // one small mark on its front face says what it is
+        const [fx, fy] = iso(x + W / 2, y + W, H / 2);
+        const mark = {
+          app: `<rect x="${fx - 6}" y="${fy - 7}" width="12" height="13" rx="1.5" fill="#fbeaf3"/><rect x="${fx - 3.5}" y="${fy - 4}" width="7" height="1.6" fill="#c9a3ba"/><rect x="${fx - 3.5}" y="${fy - 1}" width="7" height="1.6" fill="#c9a3ba"/><rect x="${fx - 3.5}" y="${fy + 2}" width="7" height="2" fill="#3d0f35"/>`,
+          shop: `<path d="M${fx - 7} ${fy - 4}h14l-2 4h-10z" fill="#fbeaf3"/><rect x="${fx - 5}" y="${fy}" width="10" height="6" fill="#2e0b28"/>`,
+          web: `<rect x="${fx - 6}" y="${fy - 6}" width="5" height="4" fill="#2e0b28"/><rect x="${fx + 1}" y="${fy - 6}" width="5" height="4" fill="#2e0b28"/><rect x="${fx - 6}" y="${fy}" width="5" height="4" fill="#2e0b28"/><rect x="${fx + 1}" y="${fy}" width="5" height="4" fill="#2e0b28"/>`,
+          auth: `<circle cx="${fx}" cy="${fy - 2}" r="3" fill="#24081f"/><path d="M${fx - 1.6} ${fy}h3.2l1 6h-5.2z" fill="#24081f"/>`,
+          job: `<rect x="${fx - 5}" y="${fy - 1}" width="10" height="2" fill="#2e0b28"/>`,
+        }[kind];
+        g += mark;
+      }
+      // its light on top: lime while it answers, coral blinking when it doesn't
+      const [lx, ly] = iso(n.cx, n.cy, H + 0.06);
+      g += `<circle class="led${n.state === 'down' ? ' is-down' : n.state === 'off' ? ' is-off' : ''}" style="--k:${all.indexOf(n)}" cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3" fill="${color[n.state]}"/>`;
     }
     pieces.push(g);
   }
 
-  // the shop at the front: its counter, the till that rings each sale, and the shopkeeper
-  const [cx0, cy0] = [shx - 0.8, shy - 0.4];
-  let counter = box(cx0, cy0, 0, 1.6, 0.8, 0.7, 'plum') + box(cx0 - 0.05, cy0 - 0.05, 0.7, 1.7, 0.9, 0.07, 'blush');
-  const tx = cx0 + 0.55, ty = cy0 + 0.62, tz = 0.77, tw = 0.75;
-  const a = iso(tx, ty, tz + 0.1), b = iso(tx + tw, ty, tz + 0.1), c2 = iso(tx + tw, ty - 0.34, tz + 0.62), d2 = iso(tx, ty - 0.34, tz + 0.62);
-  const tq = (u0, u1, v0, v1) => { const p = (u, v) => [a[0] + (b[0] - a[0]) * u + (d2[0] - a[0]) * v, a[1] + (b[1] - a[1]) * u + (d2[1] - a[1]) * v]; return pts(p(u0, v0), p(u1, v0), p(u1, v1), p(u0, v1)); };
-  counter += `<polygon points="${pts(a, b, c2, d2)}" fill="#24081f"/><polygon points="${tq(0.06, 0.94, 0.08, 0.92)}" fill="#fbeaf3"/>`;
-  [0.74, 0.58].forEach((v) => { counter += `<polygon points="${tq(0.12, 0.6, v - 0.05, v)}" fill="#c9a3ba"/>`; });
-  counter += `<polygon points="${tq(0.55, 0.88, 0.16, 0.3)}" fill="${!status || ok ? '#d6f53a' : '#ff8a5c'}" class="${!status ? '' : ok ? 'ring' : 'stuck'}"/>`;
-  pieces.push(counter);
-  pieces.push(robot(6.85, 4.05));
-
-  // the sale's trip: from the till to the app, the database, and back
-  const A = node.app, D = node.database;
-  if (status && ok && A && D && live(A.state) && live(D.state) && !reduce.matches) {
-    const p0 = iso(tx + 0.4, ty - 0.2, tz + 0.8), p1 = iso(A.cx, A.cy, A.L.h + 0.6), p2 = iso(D.cx, D.cy, D.L.h + 0.6);
-    const q = (u, v, lift) => `Q${((u[0] + v[0]) / 2).toFixed(1)} ${(Math.min(u[1], v[1]) - lift).toFixed(1)} ${v[0].toFixed(1)} ${v[1].toFixed(1)}`;
-    const path = `M${p0[0].toFixed(1)} ${p0[1].toFixed(1)} ${q(p0, p1, 36)} ${q(p1, p2, 24)} ${q(p2, p0, 44)}`;
-    pieces.push(`<path d="${path}" fill="none" stroke="#d6f53a" stroke-width="1.4" stroke-linecap="round" pathLength="1" class="trail"/><circle r="3.8" fill="#d6f53a" class="spark" style="offset-path: path('${path}')"/>`);
-  }
-
-  // the names, in front of each part, with how it is doing
+  // the names: the front two rows are named in front of each part, the back two above
+  // it, so each name sits in open floor and every row of names reads as one line
   let labels = '';
-  for (const n of nodes) {
-    // the back row is named above itself, where nothing stands behind it
-    const [lx, ly] = n.L.above ? iso(n.cx, n.cy, n.L.h + (n.L.lift || 0.85)) : iso(n.cx + n.L.w / 2, n.cy + n.L.w / 2, 0);
-    labels += `<text class="lab is-${n.state}" x="${lx.toFixed(1)}" y="${(ly + (n.L.above ? 0 : 13)).toFixed(1)}">${esc(n.L.short)}</text>`;
+  for (const r of rows) for (const n of r.nodes) {
+    const front = r.name === 'below';
+    const [lx, ly0] = front ? iso(n.cx + W / 2, n.cy + W / 2, 0) : iso(n.cx, n.cy, H + 0.62);
+    const ly = front ? ly0 + 12 : ly0;
+    const name = SHORT_NAME[n.id] || (n.s && n.s.name) || n.id;
+    labels += `<text class="lab is-${n.id === '_shops' ? (status ? 'up' : 'off') : n.state}" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}">${esc(name)}</text>`;
   }
-  { const [lx, ly] = iso(shx + 0.8, shy + 0.4, 0); labels += `<text class="lab" x="${(lx - 6).toFixed(1)}" y="${(ly + 13).toFixed(1)}">Your shop</text>`; }
   pieces.push(labels);
 
   const T = (k) => ` style="--i:${k}"`;
   const [sx, sy] = [S * C * N, S * 0.5 * N];
-  const tiles = [1, 2, 3, 4, 5, 6, 7].map((i) => seg(0.001, [i, 0], [i, N], 'stroke="rgba(241,211,228,.05)"') + seg(0.001, [0, i], [N, i], 'stroke="rgba(241,211,228,.05)"')).join('');
+  const tiles = [1, 2, 3, 4, 5, 6, 7].map((i) => seg(0.001, [i, 0], [i, N], 'stroke="rgba(241,211,228,.04)"') + seg(0.001, [0, i], [N, i], 'stroke="rgba(241,211,228,.04)"')).join('');
   return `<svg class="fa" viewBox="52 92 376 258" style="--n:${pieces.length}">
     <defs><filter id="fa-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter></defs>
     <g class="fa-base">${box(0, 0, -0.35, N, N, 0.35, 'ground')}${tiles}
@@ -688,6 +651,19 @@ function drawArt(status) {
     ${seg(0.002, [0, 0], [0, N], `class="fa-scan" stroke="#d6f53a" stroke-width="2" stroke-linecap="round" style="--sx:${sx.toFixed(1)}px;--sy:${sy.toFixed(1)}px"`)}
     ${pieces.map((p, i) => `<g class="fa-in"${T(i)}><g class="fa-x">${p}</g></g>`).join('')}
   </svg>`;
+}
+
+// The shop: a counter with the till on it; its total lights each time a sale goes through.
+function counter(n, status, ok) {
+  const w = 1.0, d = 0.62, x = n.cx - w / 2, y = n.cy - d / 2;
+  let g = box(x, y, 0, w, d, 0.55, 'plum') + box(x - 0.04, y - 0.04, 0.55, w + 0.08, d + 0.08, 0.06, 'blush');
+  const tx = x + 0.22, ty = y + 0.5, tz = 0.61, tw = 0.56;
+  const a = iso(tx, ty, tz + 0.08), b = iso(tx + tw, ty, tz + 0.08), c2 = iso(tx + tw, ty - 0.3, tz + 0.52), d2 = iso(tx, ty - 0.3, tz + 0.52);
+  const tq = (u0, u1, v0, v1) => { const p = (u, v) => [a[0] + (b[0] - a[0]) * u + (d2[0] - a[0]) * v, a[1] + (b[1] - a[1]) * u + (d2[1] - a[1]) * v]; return pts(p(u0, v0), p(u1, v0), p(u1, v1), p(u0, v1)); };
+  g += `<polygon points="${pts(a, b, c2, d2)}" fill="#24081f"/><polygon points="${tq(0.07, 0.93, 0.1, 0.9)}" fill="#fbeaf3"/>`;
+  g += `<polygon points="${tq(0.14, 0.6, 0.66, 0.74)}" fill="#c9a3ba"/>`;
+  g += `<polygon points="${tq(0.5, 0.86, 0.18, 0.34)}" fill="${!status || ok ? '#d6f53a' : '#ff8a5c'}" class="${!status ? '' : ok ? 'ring' : 'stuck'}"/>`;
+  return g;
 }
 
 // The pieces follow the pointer by their depth, like the website's pictures.
