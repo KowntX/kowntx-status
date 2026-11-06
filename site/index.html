@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kownt X status</title>
-<meta name="description" content="Whether the Kownt X app, sign-in, database and server tasks are working right now.">
+<title>KowntX status</title>
+<meta name="description" content="Whether the KowntX app, sign-in, database and server tasks are working right now.">
 <meta name="theme-color" content="#24081F">
 <link rel="icon" href="brand/kowntx-icon.svg" type="image/svg+xml">
 <link rel="icon" href="brand/favicon.png" type="image/png" sizes="48x48">
@@ -13,7 +13,7 @@
 <link rel="preload" href="fonts/bricolage-title.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist-mono.woff2" as="font" type="font/woff2" crossorigin>
 <!--
-  Built from Kountour, the Kownt X design system: the colour roles are the app's
+  Built from Kountour, the KowntX design system: the colour roles are the app's
   (src/ds/tokens.ts: light, and dark = plum + blush), the type is the app's scale
   (titleL, titleS, row, bodyM, bodyS, status, data, one step smaller on a phone),
   and the parts are Kountour's Status (dot + word), Pane, StatTile, EmptyState and
@@ -284,8 +284,8 @@
 <body>
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="./" aria-label="Kownt X status">
-      <img src="brand/kowntx-wordmark-dark.svg" alt="Kownt X" width="79" height="24">
+    <a class="brand" href="./" aria-label="KowntX status">
+      <img src="brand/kowntx-wordmark-dark.svg" alt="KowntX" width="79" height="24">
       <span>Status</span>
     </a>
     <a class="home" href="https://www.kowntx.com">kowntx.com</a>
@@ -301,7 +301,7 @@
       </div>
     </div>
     <div class="map" id="map">
-      <div class="map-h"><h2>How Kownt X is connected</h2><span id="map-note"></span></div>
+      <div class="map-h"><h2>How KowntX is connected</h2><span id="map-note"></span></div>
       <div class="tiers" id="tiers">
         <div class="tier"><span class="bskel" style="height: 56px"></span></div>
         <div class="tier"><span class="bskel" style="height: 56px"></span><span class="bskel" style="height: 56px"></span></div>
@@ -338,7 +338,7 @@
 </main>
 
 <footer class="wrap">
-  <p>Checked from GitHub every 5 minutes, separately from the app, so this page stays up when Kownt X is down.</p>
+  <p>Checked from GitHub every 5 minutes, separately from the app, so this page stays up when KowntX is down.</p>
   <p>Bills made while something is down are kept on the phone and sync when it is back.</p>
 </footer>
 
@@ -359,7 +359,7 @@ const HEAD = {
   operational: ['Everything is working', 'Billing, sign-in and the database are answering normally.'],
   degraded: ['Working, but slow', 'Some services are taking longer than usual to answer. Billing still works.'],
   partial: ['Some services are not working', 'Billing keeps working on the phone and syncs when the service is back.'],
-  major: ['Kownt X is down', 'Bills made now are kept on the phone and sync when it is back.'],
+  major: ['KowntX is down', 'Bills made now are kept on the phone and sync when it is back.'],
 };
 // The map: which layer each group sits in, and short names for its chips.
 const TIERS = [['Shops'], ['App', 'Website'], ['Backend'], ['Server tasks']];
