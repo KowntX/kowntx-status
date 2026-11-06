@@ -1,6 +1,6 @@
 # KowntX status
 
-Live page: https://kowntx.github.io/kowntx-status/
+Live page: https://status.kowntx.com/ (also https://kowntx.github.io/kowntx-status/)
 
 A GitHub Action (`.github/workflows/status.yml`) runs `check.mjs`, which asks
 each service in `services.json` whether it is answering every 5 minutes for

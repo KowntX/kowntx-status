@@ -8,6 +8,13 @@
   "compatibility_date": "2026-10-01",
   "build": { "command": "rm -rf _site && mkdir -p _site && cp -r site/* _site/ && cp -r data _site/data" },
   "assets": { "directory": "./_site", "not_found_handling": "404-page" },
+  // The page's address. status.kowntx.com already has a proxied DNS record on the kowntx.com
+  // zone, so this is a zone route (like admin.kowntx.com on the website), not a custom domain.
+  // www.kowntx.com/status forwards here (website public/_redirects).
+  "routes": [{ "pattern": "status.kowntx.com/*", "zone_name": "kowntx.com" }],
+  // Routes switch workers.dev and preview links off unless they are asked for.
+  "workers_dev": true,
+  "preview_urls": true,
   // Each branch gets a preview link (`npx wrangler preview`); needs this block.
   "previews": {}
 }
