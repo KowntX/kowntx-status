@@ -22,8 +22,15 @@ No keys or secrets are needed or stored: an answer below 500 (including
 
 ## The page
 
-`site/` is a plain static page in the KowntX design (Kountour colours and type,
-the Gold coin wordmark on the plum bar, light and dark following the device).
+`site/` is a plain static page built from the website's own parts, so it reads as
+part of kowntx.com: the plum ground, the glass nav, the night header with a lime
+eyebrow and a two-tone headline, an isometric map of every part, named, from the
+shop's counter at the front to the background jobs at the back (wires flow lime
+while a part answers and turn coral when it stops; a part that isn't live yet is
+only a dashed outline; the sale runs from the till to the app and the database
+and back), the Trust
+center's list layout, outages on a blush band torn like a receipt, and the
+receipt footer. The logo is the website's current one and never moves.
 Its fonts and logo sit next to it in `site/fonts` and `site/brand`, with no
 libraries or CDNs, so it stays up when everything else is down. It works on
 any static host (GitHub Pages or Cloudflare): it reads the results from this
