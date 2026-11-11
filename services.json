@@ -3,6 +3,9 @@
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
     { "id": "app", "name": "KowntX app (web)", "group": "App", "url": "https://app.kowntx.com/" },
+    { "id": "signin-page", "name": "Sign-in page", "group": "App", "url": "https://auth.kowntx.com/pos" },
+    { "id": "pos", "name": "KowntX POS (web)", "group": "App", "url": "https://pos.kowntx.com/" },
+    { "id": "commerce", "name": "KowntX Commerce (web)", "group": "App", "url": "https://commerce.kowntx.com/" },
     { "id": "shop", "name": "Online shop pages", "group": "App", "url": "https://app.kowntx.com/shop/status-check" },
     { "id": "website", "name": "Website", "group": "Website", "url": "https://www.kowntx.com/" },
     { "id": "database", "name": "Database", "group": "Backend", "url": "https://dvavouptszrwiscwmftx.supabase.co/rest/v1/" },
