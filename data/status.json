@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-12T12:08:01.990Z",
-  "overall": "operational",
+  "checkedAt": "2026-11-12T12:13:03.678Z",
+  "overall": "degraded",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
@@ -12,7 +12,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 177,
+      "ms": 144,
       "note": null
     },
     {
@@ -23,7 +23,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 116,
+      "ms": 122,
       "note": null
     },
     {
@@ -34,7 +34,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 137,
+      "ms": 140,
       "note": null
     },
     {
@@ -45,7 +45,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 144,
+      "ms": 150,
       "note": null
     },
     {
@@ -56,7 +56,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 299,
+      "ms": 190,
       "note": null
     },
     {
@@ -67,29 +67,29 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 221,
+      "ms": 182,
       "note": null
     },
     {
       "id": "database",
       "name": "Database",
       "group": "Backend",
-      "state": "up",
-      "shown": "up",
+      "state": "slow",
+      "shown": "slow",
       "fails": 0,
       "code": 401,
-      "ms": 225,
+      "ms": 4086,
       "note": null
     },
     {
       "id": "auth",
       "name": "Sign-in",
       "group": "Backend",
-      "state": "up",
-      "shown": "up",
+      "state": "slow",
+      "shown": "slow",
       "fails": 0,
       "code": 401,
-      "ms": 221,
+      "ms": 4087,
       "note": null
     },
     {
