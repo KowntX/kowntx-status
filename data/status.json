@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-16T15:52:03.255Z",
-  "overall": "degraded",
+  "checkedAt": "2026-11-16T15:57:15.064Z",
+  "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
@@ -12,18 +12,18 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 377,
+      "ms": 488,
       "note": null
     },
     {
       "id": "signin-page",
       "name": "Sign-in page",
       "group": "App",
-      "state": "slow",
-      "shown": "slow",
+      "state": "up",
+      "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 3157,
+      "ms": 363,
       "note": null
     },
     {
@@ -34,7 +34,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 1038,
+      "ms": 413,
       "note": null
     },
     {
@@ -45,19 +45,19 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 610,
+      "ms": 366,
       "note": null
     },
     {
       "id": "shop",
       "name": "Online shop pages",
       "group": "App",
-      "state": "down",
+      "state": "up",
       "shown": "up",
-      "fails": 1,
-      "code": null,
-      "ms": 10000,
-      "note": "No answer in 10s"
+      "fails": 0,
+      "code": 200,
+      "ms": 622,
+      "note": null
     },
     {
       "id": "website",
@@ -67,7 +67,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 797,
+      "ms": 504,
       "note": null
     },
     {
@@ -78,7 +78,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 218,
+      "ms": 148,
       "note": null
     },
     {
@@ -89,7 +89,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 205,
+      "ms": 152,
       "note": null
     },
     {
