@@ -42,7 +42,7 @@ async function once() {
         method: s.method || 'GET',
         redirect: 'follow',
         signal: AbortSignal.timeout(TIMEOUT_MS),
-        headers: { 'user-agent': 'kowntx-status (+https://github.com/KowntX/kowntx-status)', origin: 'https://kowntx-status.github.io' },
+        headers: { 'user-agent': 'kowntx-status (+https://github.com/KowntX/kowntx-status)', origin: 'https://kowntx-status.github.io', ...(s.headers || {}) },
       });
       const ms = Date.now() - t0;
       // 404 on a server task means it is not deployed; 5xx means it is broken.

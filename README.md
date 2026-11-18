@@ -13,7 +13,7 @@ and GitHub Pages.
   the repo owner gets an email. It closes itself when the service is back.
 - **The app reads** `https://kowntx.github.io/kowntx-status/data/status.json`
   to show an outage banner.
-- **Add or change a service:** edit `services.json`. `"planned": "why"` shows it
+- **Add or change a service:** edit `services.json`. A service can send its own `"headers"` (the "Emails and timed jobs" check sends the app's public key to ask the database whether timed jobs and emails are moving). `"planned": "why"` shows it
   as "Not live yet" without checking it or raising alerts; remove that line
   when it goes live.
 
