@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-18T16:25:38.938Z",
+  "checkedAt": "2026-11-18T16:27:36.853Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -12,7 +12,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 1406,
+      "ms": 939,
       "note": null
     },
     {
@@ -23,41 +23,41 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 1527,
+      "ms": 486,
       "note": null
     },
     {
       "id": "pos",
       "name": "KowntX POS (web)",
       "group": "App",
-      "state": "down",
+      "state": "up",
       "shown": "up",
-      "fails": 1,
-      "code": null,
-      "ms": 10001,
-      "note": "No answer in 10s"
+      "fails": 0,
+      "code": 200,
+      "ms": 541,
+      "note": null
     },
     {
       "id": "commerce",
       "name": "KowntX Commerce (web)",
       "group": "App",
-      "state": "down",
+      "state": "up",
       "shown": "up",
-      "fails": 1,
-      "code": null,
-      "ms": 10000,
-      "note": "No answer in 10s"
+      "fails": 0,
+      "code": 200,
+      "ms": 644,
+      "note": null
     },
     {
       "id": "shop",
       "name": "Online shop pages",
       "group": "App",
-      "state": "down",
+      "state": "up",
       "shown": "up",
-      "fails": 1,
-      "code": null,
-      "ms": 10001,
-      "note": "No answer in 10s"
+      "fails": 0,
+      "code": 200,
+      "ms": 554,
+      "note": null
     },
     {
       "id": "website",
@@ -67,7 +67,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 904,
+      "ms": 755,
       "note": null
     },
     {
@@ -78,7 +78,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 218,
+      "ms": 312,
       "note": null
     },
     {
@@ -89,7 +89,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 218,
+      "ms": 321,
       "note": null
     },
     {
