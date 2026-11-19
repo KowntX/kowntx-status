@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-19T15:50:51.299Z",
+  "checkedAt": "2026-11-19T15:56:00.936Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -12,7 +12,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 429,
+      "ms": 502,
       "note": null
     },
     {
@@ -23,7 +23,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 302,
+      "ms": 186,
       "note": null
     },
     {
@@ -34,7 +34,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 298,
+      "ms": 269,
       "note": null
     },
     {
@@ -45,7 +45,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 319,
+      "ms": 297,
       "note": null
     },
     {
@@ -56,7 +56,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 183,
+      "ms": 227,
       "note": null
     },
     {
@@ -67,7 +67,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 310,
+      "ms": 268,
       "note": null
     },
     {
@@ -78,7 +78,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 247,
+      "ms": 182,
       "note": null
     },
     {
@@ -89,7 +89,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 248,
+      "ms": 181,
       "note": null
     },
     {
@@ -100,7 +100,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 2632,
+      "ms": 2646,
       "note": null
     },
     {
