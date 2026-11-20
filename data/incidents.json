@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "billing-1795200132062",
+    "service": "billing",
+    "name": "Billing (test shop)",
+    "startedAt": "2026-11-20T18:42:12.062Z",
+    "resolvedAt": null,
+    "cause": "Answered 503",
+    "issue": 14
+  }
+]
