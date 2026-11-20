@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-20T20:35:47.387Z",
+  "checkedAt": "2026-11-20T20:40:03.127Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -11,8 +11,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 189,
+      "ms": 175,
       "note": null
     },
     {
@@ -22,8 +23,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 127,
+      "ms": 111,
       "note": null
     },
     {
@@ -33,8 +35,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 168,
+      "ms": 118,
       "note": null
     },
     {
@@ -44,8 +47,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 213,
+      "ms": 138,
       "note": null
     },
     {
@@ -55,8 +59,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 153,
+      "ms": 126,
       "note": null
     },
     {
@@ -66,8 +71,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 234,
+      "ms": 224,
       "note": null
     },
     {
@@ -77,8 +83,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 401,
-      "ms": 224,
+      "ms": 232,
       "note": null
     },
     {
@@ -88,8 +95,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 401,
-      "ms": 223,
+      "ms": 226,
       "note": null
     },
     {
@@ -99,8 +107,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 1196,
+      "ms": 1138,
       "note": null
     },
     {
@@ -110,8 +119,9 @@
       "state": "up",
       "shown": "up",
       "fails": 0,
+      "slows": 0,
       "code": 200,
-      "ms": 2846,
+      "ms": 2583,
       "note": null
     },
     {
@@ -121,6 +131,7 @@
       "state": "planned",
       "shown": "planned",
       "fails": 0,
+      "slows": 0,
       "code": null,
       "ms": null,
       "note": "Not switched on yet"
@@ -132,6 +143,7 @@
       "state": "planned",
       "shown": "planned",
       "fails": 0,
+      "slows": 0,
       "code": null,
       "ms": null,
       "note": "Not switched on yet"
@@ -143,6 +155,7 @@
       "state": "planned",
       "shown": "planned",
       "fails": 0,
+      "slows": 0,
       "code": null,
       "ms": null,
       "note": "Not switched on yet"
