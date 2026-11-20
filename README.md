@@ -15,7 +15,13 @@ and GitHub Pages.
   to show an outage banner.
 - **Add or change a service:** edit `services.json`. A service can send its own `"headers"` (the "Emails and timed jobs" check sends the app's public key to ask the database whether timed jobs and emails are moving). `"planned": "why"` shows it
   as "Not live yet" without checking it or raising alerts; remove that line
-  when it goes live.
+  when it goes live `"untilLive": "why"` does the same only while the
+  address answers 404 (its server part is not deployed yet), then counts by
+  itself.
+- **Billing (test shop)** asks the database's `robot_health` (app migration
+  767): every 15 minutes the live database makes a cash bill, a khata bill and
+  a payment in a shop of its own, checks stock and khata, and takes it all
+  back. Down means the last run failed, or none ran in 40 minutes.
 
 No keys or secrets are needed or stored: an answer below 500 (including
 "not signed in") counts as working.

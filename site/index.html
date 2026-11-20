@@ -471,6 +471,8 @@ const WHAT = {
   payments: 'Links a customer pays a bill with.',
   upi: 'Tells KowntX a payment has arrived.',
   push: 'Alerts on your phone for orders and approvals.',
+  billing: 'A test shop makes a bill, a khata entry and a payment every 15 minutes.',
+  jobs: 'Emails and the jobs that run on their own.',
 };
 const GROUP = { App: 'The app', Website: 'The website', Backend: 'Behind the app', 'Server tasks': 'Background jobs' };
 
@@ -527,7 +529,7 @@ function scramble(el, text, ms = 700) {
 // Which layer each group sits in, and short names for its chips.
 const TIERS = [['Shops'], ['App', 'Website'], ['Backend'], ['Server tasks']];
 const TIER_NAME = ['Who uses it', 'What they open', 'What it runs on', 'Jobs in the background'];
-const SHORT = { app: 'App', shop: 'Shop pages', website: 'Website', database: 'Database', auth: 'Sign-in', payments: 'Payment links', upi: 'Confirmations', push: 'Notifications' };
+const SHORT = { app: 'App', shop: 'Shop pages', website: 'Website', database: 'Database', auth: 'Sign-in', payments: 'Payment links', upi: 'Confirmations', push: 'Notifications', billing: 'Billing check' };
 
 function mapSkeleton() {
   $('tiers').innerHTML = [1, 2, 2, 3].map((k, i) => `<div class="tier"><p class="tier-t">${TIER_NAME[i]}</p>${'<div class="chip skel-chip"></div>'.repeat(k)}</div>`).join('');

@@ -10,6 +10,7 @@
     { "id": "website", "name": "Website", "group": "Website", "url": "https://www.kowntx.com/" },
     { "id": "database", "name": "Database", "group": "Backend", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/rest/v1/" },
     { "id": "auth", "name": "Sign-in", "group": "Backend", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/auth/v1/health" },
+    { "id": "billing", "name": "Billing (test shop)", "group": "Server tasks", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/rest/v1/rpc/robot_health", "headers": { "apikey": "sb_publishable_nE6Sw0Om1QCquZK1PKgn-g_k5N5Ast2" }, "untilLive": "Starts with the next app update" },
     { "id": "jobs", "name": "Emails and timed jobs", "group": "Server tasks", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/rest/v1/rpc/public_health", "headers": { "apikey": "sb_publishable_nE6Sw0Om1QCquZK1PKgn-g_k5N5Ast2" } },
     { "id": "payments", "name": "Payment links", "group": "Server tasks", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/functions/v1/payment-link", "method": "OPTIONS", "planned": "Not switched on yet" },
     { "id": "upi", "name": "Payment confirmations (Razorpay)", "group": "Server tasks", "url": "https://kpmqbrcguqeyouylykzo.supabase.co/functions/v1/razorpay-webhook", "method": "OPTIONS", "planned": "Not switched on yet" },
