@@ -9,10 +9,11 @@ straight from this repo. GitHub only starts scheduled jobs on a quiet repo every
 few hours, so one long run is what keeps the checks every 5 minutes. Free: public repo, GitHub Actions
 and GitHub Pages.
 
+- **Slow** (an answer over 3 seconds) shows only after two slow checks in a row.
 - **Down for two checks in a row** → an issue labelled `outage` opens here, so
   the repo owner gets an email. It closes itself when the service is back.
 - **The app reads** `https://kowntx.github.io/kowntx-status/data/status.json`
-  to show an outage banner.
+  to show an outage banner, only when a part the counter needs is down (never for slow).
 - **Add or change a service:** edit `services.json`. A service can send its own `"headers"` (the "Emails and timed jobs" check sends the app's public key to ask the database whether timed jobs and emails are moving). `"planned": "why"` shows it
   as "Not live yet" without checking it or raising alerts; remove that line
   when it goes live `"untilLive": "why"` does the same only while the
