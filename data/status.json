@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-20T18:35:42.698Z",
-  "overall": "operational",
+  "checkedAt": "2026-11-20T18:37:02.272Z",
+  "overall": "degraded",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
@@ -12,7 +12,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 170,
+      "ms": 185,
       "note": null
     },
     {
@@ -23,7 +23,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 199,
+      "ms": 176,
       "note": null
     },
     {
@@ -34,7 +34,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 127,
+      "ms": 152,
       "note": null
     },
     {
@@ -45,7 +45,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 134,
+      "ms": 202,
       "note": null
     },
     {
@@ -56,7 +56,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 98,
+      "ms": 174,
       "note": null
     },
     {
@@ -67,7 +67,7 @@
       "shown": "up",
       "fails": 0,
       "code": 200,
-      "ms": 177,
+      "ms": 234,
       "note": null
     },
     {
@@ -78,7 +78,7 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 290,
+      "ms": 241,
       "note": null
     },
     {
@@ -89,30 +89,30 @@
       "shown": "up",
       "fails": 0,
       "code": 401,
-      "ms": 227,
+      "ms": 240,
       "note": null
     },
     {
       "id": "billing",
       "name": "Billing (test shop)",
       "group": "Server tasks",
-      "state": "planned",
-      "shown": "planned",
-      "fails": 0,
-      "code": 404,
-      "ms": 4498,
-      "note": "Starts with the next app update"
+      "state": "down",
+      "shown": "up",
+      "fails": 1,
+      "code": 503,
+      "ms": 2005,
+      "note": "Answered 503"
     },
     {
       "id": "jobs",
       "name": "Emails and timed jobs",
       "group": "Server tasks",
-      "state": "down",
-      "shown": "up",
-      "fails": 1,
-      "code": 500,
-      "ms": 4278,
-      "note": "Answered 500"
+      "state": "slow",
+      "shown": "slow",
+      "fails": 0,
+      "code": 200,
+      "ms": 3108,
+      "note": null
     },
     {
       "id": "payments",
