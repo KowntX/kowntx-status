@@ -296,6 +296,21 @@
     .out-len { grid-column: 3; grid-row: 1; }
   }
 
+  /* ------------------------------------------------------------ follow by email (app migration 768) */
+  .follow-form { display: grid; gap: 12px; margin-top: 32px; max-width: 640px; }
+  .follow-form label { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  .follow-row { display: grid; gap: 12px; }
+  .follow-form input { height: 52px; width: 100%; padding-inline: 16px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--sunken); color: var(--ink); font: 400 16px/1 var(--body); }
+  .follow-form input::placeholder { color: var(--ink-3); }
+  .follow-form input:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+  .follow-form .cta { width: 100%; }
+  .follow-say { min-height: 24px; font-size: 15px; color: var(--ink-2); }
+  .follow-say.is-bad { color: var(--coral); }
+  @media (min-width: 768px) {
+    .follow-row { grid-template-columns: minmax(0, 1fr) auto; }
+    .follow-form .cta { width: auto; }
+  }
+
   /* ------------------------------------------------------------ the closing band, in lime */
   .close { background: var(--lime); color: var(--lime-ink); padding: 96px 0; text-align: center; margin-top: -10px; }
   .close .h-hero { font-size: clamp(2.4rem, 6vw, 4.75rem); }
@@ -409,6 +424,25 @@
         </div>
       </div>
       <div id="incidents"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="follow" aria-labelledby="follow-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 class="h-sec" id="follow-title">Get an email, <span class="quiet">when it breaks and when it is back.</span></h2>
+          <p style="margin-top: 16px">One email when a part stops working, one when it works again. Nothing else.</p>
+        </div>
+      </div>
+      <form class="follow-form" id="follow-form" novalidate>
+        <label for="follow-email">Your email</label>
+        <div class="follow-row">
+          <input id="follow-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@yourshop.in" required maxlength="254">
+          <button class="cta" type="submit" id="follow-go"><span class="cta-fill"></span>Email me</button>
+        </div>
+        <p class="follow-say" id="follow-say" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 
@@ -787,6 +821,39 @@ document.addEventListener('pointerover', (e) => {
   bars.forEach((w, i) => { if (i % 2 === 0) out += `<rect x="${x}" y="0" width="${w}" height="24" fill="currentColor"/>`; x += w * 2; });
   const svg = $('barcode'); svg.setAttribute('viewBox', `0 0 ${x} 24`); svg.innerHTML = out;
   $('year').textContent = new Date().getFullYear();
+})();
+
+/* ---------------------------------------------------------------- follow by email (app migration 768): the form, and the two links in the emails */
+(function follow() {
+  const API = 'https://kpmqbrcguqeyouylykzo.supabase.co/rest/v1/rpc/';
+  const KEY = 'sb_publishable_nE6Sw0Om1QCquZK1PKgn-g_k5N5Ast2';
+  const say = (text, bad) => { const p = $('follow-say'); p.textContent = text; p.classList.toggle('is-bad', !!bad); };
+  const call = (fn, body) => fetch(API + fn, { method: 'POST', headers: { apikey: KEY, 'content-type': 'application/json' }, body: JSON.stringify(body) })
+    .then((r) => (r.status === 404 ? { soon: true } : r.ok ? r.json() : Promise.reject(r.status)));
+  const form = $('follow-form'), input = $('follow-email'), go = $('follow-go');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = input.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say('Type your email, like you@yourshop.in.', true); input.focus(); return; }
+    go.disabled = true; go.lastChild.textContent = 'Sending…';
+    call('status_follow', { p_email: email }).then((a) => {
+      if (a.soon) say('Emails start with the next update. Please try again tomorrow.', true);
+      else if (a.ok) { say(`Check ${email} and press Confirm. Then you get an email when a part breaks and when it is back.`); form.reset(); }
+      else if (a.why === 'busy') say('Many people asked just now. Please try again in an hour.', true);
+      else say('Type your email, like you@yourshop.in.', true);
+    }, () => say('That did not go through. Check your internet and try again.', true))
+      .finally(() => { go.disabled = false; go.lastChild.textContent = 'Email me'; });
+  });
+  // The links in the emails: ?follow=<token> confirms, ?unfollow=<token> stops.
+  const q = new URLSearchParams(location.search);
+  const [fn, token] = q.get('follow') ? ['status_follow_confirm', q.get('follow')] : q.get('unfollow') ? ['status_unfollow', q.get('unfollow')] : [];
+  if (!fn || !/^[0-9a-f-]{36}$/i.test(token)) return;
+  history.replaceState(null, '', location.pathname);
+  $('follow').scrollIntoView({ block: 'start' });
+  call(fn, { p_token: token }).then((done) => {
+    if (fn === 'status_unfollow') say(done === true ? 'Done. No more status emails come to you.' : 'You already get no status emails.');
+    else say(done === true ? 'Confirmed. You get an email when a part of KowntX breaks, and when it is back.' : 'That link has run out. Type your email again for a new one.', done !== true);
+  }, () => say('That did not go through. Check your internet and open the link again.', true));
 })();
 
 // window.KX_SOURCE lets a preview feed the page sample data; the live page reads the repo.

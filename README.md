@@ -18,6 +18,13 @@ and GitHub Pages.
   when it goes live `"untilLive": "why"` does the same only while the
   address answers 404 (its server part is not deployed yet), then counts by
   itself.
+- **Follow by email.** The form under "Every part" calls the database's
+  `status_follow` (app migration 768). The person confirms from an email; then
+  the database reads `data/status.json` every 5 minutes and emails them when a
+  part goes down and when it is back. `?follow=<token>` and `?unfollow=<token>`
+  are the two links in those emails. Before 768 is live the form says emails
+  start with the next update. When the database itself is down these emails
+  cannot go out; the page still shows it.
 - **Billing (test shop)** asks the database's `robot_health` (app migration
   767): every 15 minutes the live database makes a cash bill, a khata bill and
   a payment in a shop of its own, checks stock and khata, and takes it all
