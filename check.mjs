@@ -45,6 +45,10 @@ async function once() {
         headers: { 'user-agent': 'kowntx-status (+https://github.com/KowntX/kowntx-status)', origin: 'https://kowntx-status.github.io', ...(s.headers || {}) },
       });
       const ms = Date.now() - t0;
+      // A check added before its server part goes live ("untilLive"): while
+      // the address answers 404 it shows as not live yet, without alerts, and
+      // it starts counting by itself the first time it answers.
+      if (s.untilLive && res.status === 404) return { state: 'planned', code: 404, ms, note: s.untilLive };
       // 404 on a server task means it is not deployed; 5xx means it is broken.
       const up = res.status < 500 && res.status !== 404;
       return { state: up ? (ms > SLOW_MS ? 'slow' : 'up') : 'down', code: res.status, ms, note: up ? null : `Answered ${res.status}` };
