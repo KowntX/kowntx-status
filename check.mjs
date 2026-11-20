@@ -19,6 +19,9 @@ const TIMEOUT_MS = 10000;
 const SLOW_MS = 3000;
 /** Two failed checks in a row before calling it an outage: one dropped request is not news. */
 const FAILS_FOR_OUTAGE = 2;
+/** Slow the same way: one slow answer from GitHub's far-away runners is not news (20 Nov 2026:
+ *  "Emails and timed jobs" showed slow 38 times in 600 checks on single readings, nothing was wrong). */
+const SLOWS_FOR_SLOW = 2;
 const KEEP_DAYS = 90;
 
 async function once() {
@@ -76,7 +79,10 @@ async function once() {
     const before = prev.services.find((p) => p.id === s.id);
     const fails = r.state === 'down' ? (before?.fails ?? 0) + 1 : 0;
     // Shown as down only once it has failed twice; a first failure shows as "checking".
-    const shown = r.state === 'down' && fails < FAILS_FOR_OUTAGE ? (before?.shown === 'down' ? 'down' : 'up') : r.state;
+    const slows = r.state === 'slow' ? (before?.slows ?? 0) + 1 : 0;
+    const shown = r.state === 'down' && fails < FAILS_FOR_OUTAGE ? (before?.shown === 'down' ? 'down' : 'up')
+      : r.state === 'slow' && slows < SLOWS_FOR_SLOW ? 'up'
+      : r.state;
 
     if (r.state !== 'planned') {
       const h = (history[s.id] ??= {});
@@ -104,7 +110,7 @@ async function once() {
       }
     }
 
-    services.push({ id: s.id, name: s.name, group: s.group, state: r.state, shown, fails, code: r.code, ms: r.ms, note: r.note });
+    services.push({ id: s.id, name: s.name, group: s.group, state: r.state, shown, fails, slows, code: r.code, ms: r.ms, note: r.note });
   }
 
   const live = services.filter((s) => s.shown !== 'planned');
