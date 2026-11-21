@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-21T08:43:46.788Z",
+  "checkedAt": "2026-11-21T08:48:56.428Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -13,7 +13,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 133,
+      "ms": 431,
       "note": null
     },
     {
@@ -25,7 +25,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 125,
+      "ms": 398,
       "note": null
     },
     {
@@ -37,7 +37,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 138,
+      "ms": 396,
       "note": null
     },
     {
@@ -49,7 +49,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 187,
+      "ms": 395,
       "note": null
     },
     {
@@ -61,7 +61,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 145,
+      "ms": 193,
       "note": null
     },
     {
@@ -73,7 +73,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 239,
+      "ms": 490,
       "note": null
     },
     {
@@ -85,7 +85,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 251,
+      "ms": 332,
       "note": null
     },
     {
@@ -97,7 +97,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 252,
+      "ms": 332,
       "note": null
     },
     {
@@ -109,19 +109,19 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 2990,
+      "ms": 1206,
       "note": null
     },
     {
       "id": "jobs",
       "name": "Emails and timed jobs",
       "group": "Server tasks",
-      "state": "slow",
+      "state": "up",
       "shown": "up",
       "fails": 0,
-      "slows": 1,
+      "slows": 0,
       "code": 200,
-      "ms": 3052,
+      "ms": 1214,
       "note": null
     },
     {
