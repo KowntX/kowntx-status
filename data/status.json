@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-23T16:59:45.893Z",
+  "checkedAt": "2026-11-23T17:04:55.553Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -13,7 +13,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 261,
+      "ms": 189,
       "note": null
     },
     {
@@ -25,20 +25,20 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 144,
+      "ms": 179,
       "note": null
     },
     {
       "id": "pos",
       "name": "KowntX POS (web)",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 185,
-      "note": null
+      "code": null,
+      "ms": 10001,
+      "note": "No answer in 10s"
     },
     {
       "id": "commerce",
@@ -49,7 +49,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 188,
+      "ms": 474,
       "note": null
     },
     {
@@ -61,7 +61,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 226,
+      "ms": 468,
       "note": null
     },
     {
@@ -73,7 +73,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 302,
+      "ms": 337,
       "note": null
     },
     {
@@ -85,7 +85,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 214,
+      "ms": 195,
       "note": null
     },
     {
@@ -97,7 +97,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 268,
+      "ms": 196,
       "note": null
     },
     {
@@ -109,7 +109,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 955,
+      "ms": 964,
       "note": null
     },
     {
@@ -121,7 +121,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 974,
+      "ms": 975,
       "note": null
     },
     {
