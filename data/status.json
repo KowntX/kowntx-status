@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-26T09:52:18.007Z",
+  "checkedAt": "2026-11-26T10:32:46.764Z",
   "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
@@ -8,61 +8,61 @@
       "id": "app",
       "name": "KowntX app (web)",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 222,
-      "note": null
+      "code": 522,
+      "ms": 164,
+      "note": "Answered 522"
     },
     {
       "id": "signin-page",
       "name": "Sign-in page",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 173,
-      "note": null
+      "code": 522,
+      "ms": 96,
+      "note": "Answered 522"
     },
     {
       "id": "pos",
       "name": "KowntX POS (web)",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 165,
-      "note": null
+      "code": 522,
+      "ms": 181,
+      "note": "Answered 522"
     },
     {
       "id": "commerce",
       "name": "KowntX Commerce (web)",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 171,
-      "note": null
+      "code": 522,
+      "ms": 138,
+      "note": "Answered 522"
     },
     {
       "id": "shop",
       "name": "Online shop pages",
       "group": "App",
-      "state": "up",
+      "state": "down",
       "shown": "up",
-      "fails": 0,
+      "fails": 1,
       "slows": 0,
-      "code": 200,
-      "ms": 192,
-      "note": null
+      "code": 522,
+      "ms": 137,
+      "note": "Answered 522"
     },
     {
       "id": "website",
@@ -73,7 +73,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 250,
+      "ms": 230,
       "note": null
     },
     {
@@ -85,7 +85,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 205,
+      "ms": 264,
       "note": null
     },
     {
@@ -97,7 +97,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 200,
+      "ms": 261,
       "note": null
     },
     {
@@ -109,7 +109,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 1047,
+      "ms": 1224,
       "note": null
     },
     {
@@ -121,7 +121,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 1135,
+      "ms": 1168,
       "note": null
     },
     {
