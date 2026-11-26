@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-26T10:43:34.593Z",
-  "overall": "partial",
+  "checkedAt": "2026-11-26T10:48:15.701Z",
+  "overall": "operational",
   "title": "KowntX status",
   "note": "Checked from GitHub every 5 minutes. Any answer below 500 counts as up: a sign-in service that says 'not signed in' is working.",
   "services": [
@@ -8,61 +8,61 @@
       "id": "app",
       "name": "KowntX app (web)",
       "group": "App",
-      "state": "down",
-      "shown": "down",
-      "fails": 4,
+      "state": "up",
+      "shown": "up",
+      "fails": 0,
       "slows": 0,
-      "code": 522,
-      "ms": 141,
-      "note": "Answered 522"
+      "code": 200,
+      "ms": 206,
+      "note": null
     },
     {
       "id": "signin-page",
       "name": "Sign-in page",
       "group": "App",
-      "state": "down",
-      "shown": "down",
-      "fails": 4,
+      "state": "up",
+      "shown": "up",
+      "fails": 0,
       "slows": 0,
-      "code": 522,
-      "ms": 95,
-      "note": "Answered 522"
+      "code": 200,
+      "ms": 171,
+      "note": null
     },
     {
       "id": "pos",
       "name": "KowntX POS (web)",
       "group": "App",
-      "state": "down",
-      "shown": "down",
-      "fails": 4,
+      "state": "up",
+      "shown": "up",
+      "fails": 0,
       "slows": 0,
-      "code": 522,
-      "ms": 123,
-      "note": "Answered 522"
+      "code": 200,
+      "ms": 166,
+      "note": null
     },
     {
       "id": "commerce",
       "name": "KowntX Commerce (web)",
       "group": "App",
-      "state": "down",
-      "shown": "down",
-      "fails": 4,
+      "state": "up",
+      "shown": "up",
+      "fails": 0,
       "slows": 0,
-      "code": 522,
-      "ms": 136,
-      "note": "Answered 522"
+      "code": 200,
+      "ms": 177,
+      "note": null
     },
     {
       "id": "shop",
       "name": "Online shop pages",
       "group": "App",
-      "state": "down",
-      "shown": "down",
-      "fails": 4,
+      "state": "up",
+      "shown": "up",
+      "fails": 0,
       "slows": 0,
-      "code": 522,
-      "ms": 118,
-      "note": "Answered 522"
+      "code": 200,
+      "ms": 173,
+      "note": null
     },
     {
       "id": "website",
@@ -73,7 +73,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 226,
+      "ms": 169,
       "note": null
     },
     {
@@ -85,7 +85,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 159,
+      "ms": 207,
       "note": null
     },
     {
@@ -97,7 +97,7 @@
       "fails": 0,
       "slows": 0,
       "code": 401,
-      "ms": 161,
+      "ms": 208,
       "note": null
     },
     {
@@ -109,7 +109,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 832,
+      "ms": 1202,
       "note": null
     },
     {
@@ -121,7 +121,7 @@
       "fails": 0,
       "slows": 0,
       "code": 200,
-      "ms": 793,
+      "ms": 1133,
       "note": null
     },
     {
